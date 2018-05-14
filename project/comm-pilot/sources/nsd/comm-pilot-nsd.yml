@@ -1,0 +1,43 @@
+descriptor_version: "1.0"
+vendor: "quobis"
+name: "communication-pilot"
+version: "0.1"
+author: "Ana Pol @: QUOBIS"
+description: "Descriptor to package Communication Pilot"
+##
+## The various network functions this service
+## is composed of.
+##
+network_functions:
+  - vnf_id: "vnf_wac"
+    vnf_vendor: "quobis"
+    vnf_name: "wac-vnf"
+    vnf_version: "0.1"
+
+##
+## The NS connection points to the
+## outside world.
+##
+connection_points:
+  - id: "nscpmgmt"
+    interface: "ipv4"
+    type: "management"
+  - id: "nscpexternal"
+    interface: "ipv4"
+    type: "external"
+
+##
+## The virtual links that interconnect
+## the different connections points.
+##
+virtual_links:
+  - id: "vlmgmt"
+    connectivity_type: "E-Line"
+    connection_points_reference:
+      - "vnf_wac:cpmgmt"
+      - "nscpmgmt"
+  - id: "vlexternal"
+    connectivity_type: "E-Line"
+    connection_points_reference:
+      - "nscpexternal"
+      - "vnf_wac:cpexternal"

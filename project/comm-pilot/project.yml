@@ -1,0 +1,8 @@
+descriptor_extension: yml
+package:
+  description: Communication Pilot
+  maintainer: Ana Pol, Quobis, ana.pol@quobis.com
+  name: "communication-pilot"
+  vendor: "quobis"
+  version: "0.5"
+version: '0.5'
