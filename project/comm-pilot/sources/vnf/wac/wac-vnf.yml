@@ -4,7 +4,7 @@
 ##
 descriptor_version: "vnfd-schema-01"
 vendor: "quobis"
-name: "wac-1-vnf"
+name: "wac-vnf"
 version: "0.1"
 author: "Ana Pol :@ QUOBIS"
 description: "Web Application Controller"
