@@ -4,7 +4,7 @@
 ##
 descriptor_version: "vnfd-schema-01"
 vendor: "quobis"
-name: "wac-vnf"
+name: "bs-vnf"
 version: "0.1"
 author: "Ana Pol :@ QUOBIS"
 description: "Web Application Controller"
@@ -15,7 +15,7 @@ virtual_deployment_units:
   - id: "vdu01"
     vm_image: "http://www.google.es"
     vm_image_format: "qcow2"
-    vm_image_md5: 'ee1eca47dc88f4879d8a229cc70a07c6'
+    vm_image_md5: 'd5ab414b734040a5bbf8684347c2a1a6'
     resource_requirements:
       cpu:
         vcpus: 1
@@ -29,9 +29,9 @@ virtual_deployment_units:
       - id: "mgmt"
         interface: "ipv4"
         type: "management"
-      - id: "external"
+      - id: "internal"
         interface: "ipv4"
-        type: "external"
+        type: "internal"
 # input / output / internal / external /  management
 
 ## The virtual links that interconnect
@@ -43,11 +43,11 @@ virtual_links:
     connection_points_reference:
       - "vdu01:mgmt"
       - "cpmgmt"
-  - id: "vlexternal"
+  - id: "vlinternal"
     connectivity_type: "E-Line"
     connection_points_reference:
-      - "vdu01:external"
-      - "cpexternal"
+      - "vdu01:internal"
+      - "cpinternal"
 
 # connectivity type
 # E-LAN = switch
@@ -61,9 +61,9 @@ connection_points:
   - id: "cpmgmt"
     interface: "ipv4"
     type: "management"
-  - id: "cpexternal"
+  - id: "cpinternal"
     interface: "ipv4"
-    type: "external"
+    type: "internal"
 
 #function_specific_managers:
 #  - id: "sonfsmplugtestanritsucss1"
