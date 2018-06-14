@@ -72,6 +72,9 @@ connection_points:
   - id: "cpexternal"
     interface: "ipv4"
     type: "external"
+  - id: "cpinternal"
+    interface: "ipv4"
+    type: "internal"
 
 #function_specific_managers:
 #  - id: "sonfsmplugtestanritsucss1"
