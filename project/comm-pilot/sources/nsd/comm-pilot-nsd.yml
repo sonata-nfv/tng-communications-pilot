@@ -9,10 +9,22 @@ description: "Descriptor to package Communication Pilot"
 ## is composed of.
 ##
 network_functions:
-  - vnf_id: "vnf_wac"
+  - vnf_id: "vnf_wac_1"
     vnf_vendor: "quobis"
-    vnf_name: "wac-vnf"
+    vnf_name: "wac-1-vnf"
     vnf_version: "0.1"
+  - vnf_id: "vnf_wac_2"
+    vnf_vendor: "quobis"
+    vnf_name: "wac-2-vnf"
+    vnf_version: "0.1"    
+  - vnf_id: "vnf_rp"
+    vnf_vendor: "quobis"
+    vnf_name: "rp-vnf"
+    vnf_version: "0.1"   
+  - vnf_id: "vnf_bs"
+    vnf_vendor: "quobis"
+    vnf_name: "bs-vnf"
+    vnf_version: "0.1"           
 
 ##
 ## The NS connection points to the
@@ -34,10 +46,22 @@ virtual_links:
   - id: "vlmgmt"
     connectivity_type: "E-Line"
     connection_points_reference:
-      - "vnf_wac:cpmgmt"
+      - "vnf_wac_1:cpmgmt"
+      - "vnf_wac_2:cpmgmt"
+      - "vnf_rp:cpmgmt"            
+      - "vnf_bs:cpmgmt"                  
       - "nscpmgmt"
   - id: "vlexternal"
     connectivity_type: "E-Line"
     connection_points_reference:
       - "nscpexternal"
-      - "vnf_wac:cpexternal"
+      - "vnf_rp:cpexternal"
+  - id: "vlinternal"
+    connectivity_type: "E-Line"
+    connection_points_reference:
+      - "nscpexternal"
+      - "vnf_wac_1:cpinternal"      
+      - "vnf_wac_2:cpinternal"      
+      - "vnf_rp:cpinternal"      
+      - "vnf_bs:cpinternal"                        
+                 

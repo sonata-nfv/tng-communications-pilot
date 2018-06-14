@@ -4,7 +4,7 @@
 ##
 descriptor_version: "vnfd-schema-01"
 vendor: "quobis"
-name: "wac-vnf"
+name: "rp-vnf"
 version: "0.1"
 author: "Ana Pol :@ QUOBIS"
 description: "Web Application Controller"
@@ -15,7 +15,7 @@ virtual_deployment_units:
   - id: "vdu01"
     vm_image: "http://www.google.es"
     vm_image_format: "qcow2"
-    vm_image_md5: 'ee1eca47dc88f4879d8a229cc70a07c6'
+    vm_image_md5: 'ca105522460cd23b6beeb6f2e1fd805f'
     resource_requirements:
       cpu:
         vcpus: 1
@@ -32,6 +32,9 @@ virtual_deployment_units:
       - id: "external"
         interface: "ipv4"
         type: "external"
+      - id: "internal"
+        interface: "ipv4"
+        type: "internal"        
 # input / output / internal / external /  management
 
 ## The virtual links that interconnect
@@ -48,6 +51,11 @@ virtual_links:
     connection_points_reference:
       - "vdu01:external"
       - "cpexternal"
+  - id: "vlinternal"
+    connectivity_type: "E-Line"
+    connection_points_reference:
+      - "vdu01:internal"
+      - "cpinternal"      
 
 # connectivity type
 # E-LAN = switch
