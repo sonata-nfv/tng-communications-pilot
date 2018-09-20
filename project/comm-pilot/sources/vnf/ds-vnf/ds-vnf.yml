@@ -4,10 +4,10 @@
 ##
 descriptor_version: "vnfd-schema-01"
 vendor: "quobis"
-name: "rp-vnf"
+name: "ds-vnf"
 version: "0.1"
 author: "Ana Pol :@ QUOBIS"
-description: "Nginx"
+description: "Dispatcher"
 ##
 ## The virtual deployment unit.
 ##
@@ -15,7 +15,7 @@ virtual_deployment_units:
   - id: "vdu01"
     vm_image: "http://www.google.es"
     vm_image_format: "qcow2"
-    vm_image_md5: "ca105522460cd23b6beeb6f2e1fd805f"
+    vm_image_md5: "3a67334e2703ebd6dcd7a8ad6d5f2ea9"
     resource_requirements:
       cpu:
         vcpus: 1
@@ -29,13 +29,9 @@ virtual_deployment_units:
       - id: "mgmt"
         interface: "ipv4"
         type: "management"
-      - id: "external"
-        interface: "ipv4"
-        type: "external"
       - id: "internal"
         interface: "ipv4"
         type: "internal"
-# input / output / internal / external /  management
 
 ## The virtual links that interconnect
 ## the different connections points.
@@ -46,20 +42,11 @@ virtual_links:
     connection_points_reference:
       - "vdu01:mgmt"
       - "cpmgmt"
-  - id: "vlexternal"
-    connectivity_type: "E-Line"
-    connection_points_reference:
-      - "vdu01:external"
-      - "cpexternal"
   - id: "vlinternal"
     connectivity_type: "E-Line"
     connection_points_reference:
       - "vdu01:internal"
       - "cpinternal"
-
-# connectivity type
-# E-LAN = switch
-# E-Line = cable
 
 ##
 ## The VNF connection points to the
@@ -69,17 +56,6 @@ connection_points:
   - id: "cpmgmt"
     interface: "ipv4"
     type: "management"
-  - id: "cpexternal"
-    interface: "ipv4"
-    type: "external"
   - id: "cpinternal"
     interface: "ipv4"
     type: "internal"
-
-#function_specific_managers:
-#  - id: "sonfsmplugtestanritsucss1"
-#    description: "FSM to do a first FSM test"
-#    image: "sonatanfv/plugtest-anritsu-fsm-css"
-#    options:
-#      - key: "type"
-#        value: "start"

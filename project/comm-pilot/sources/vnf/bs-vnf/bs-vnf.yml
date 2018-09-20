@@ -7,7 +7,7 @@ vendor: "quobis"
 name: "bs-vnf"
 version: "0.1"
 author: "Ana Pol :@ QUOBIS"
-description: "Web Application Controller"
+description: "Backend services including MongoDB and RabbitMQ"
 ##
 ## The virtual deployment unit.
 ##
@@ -15,7 +15,7 @@ virtual_deployment_units:
   - id: "vdu01"
     vm_image: "http://www.google.es"
     vm_image_format: "qcow2"
-    vm_image_md5: 'd5ab414b734040a5bbf8684347c2a1a6'
+    vm_image_md5: "d5ab414b734040a5bbf8684347c2a1a6"
     resource_requirements:
       cpu:
         vcpus: 1
