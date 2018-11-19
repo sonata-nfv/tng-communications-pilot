@@ -5,23 +5,23 @@ files:
     type: application/vnd.5gtango.nsd
     tags:
       - eu.5gtango
-  - path: sources/vnf/bs-vnf/bs-vnf.yml
+  - path: sources/vnfd/bs-vnf/bs-vnf.yml
     type: application/vnd.5gtango.vnfd
     tags:
       - eu.5gtango
-  - path: sources/vnf/ds-vnf/ds-vnf.yml
+  - path: sources/vnfd/ds-vnf/ds-vnf.yml
     type: application/vnd.5gtango.vnfd
     tags:
       - eu.5gtango
-  - path: sources/vnf/ms-vnf/ms-vnf.yml
+  - path: sources/vnfd/ms-vnf/ms-vnf.yml
     type: application/vnd.5gtango.vnfd
     tags:
       - eu.5gtango
-  - path: sources/vnf/rp-vnf/rp-vnf.yml
+  - path: sources/vnfd/rp-vnf/rp-vnf.yml
     type: application/vnd.5gtango.vnfd
     tags:
       - eu.5gtango
-  - path: sources/vnf/wac-vnf/wac-vnf.yml
+  - path: sources/vnfd/wac-vnf/wac-vnf.yml
     type: application/vnd.5gtango.vnfd
     tags:
       - eu.5gtango
