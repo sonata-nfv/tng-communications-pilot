@@ -5,7 +5,7 @@
 # SNMP agent Communication
 
 ## snmp-agent-communication.py
-This script will read  values from WAC and MS VNFs and stores the values in simple text files so that it can be read by scripts called by `snmpd`. 
+This script will read  values from WAC and MS VNFs and stores the values in simple text files so that it can be read by scripts called by `snmpd`. This means that this script just read the values from the VNF, normalizes and calculate a mean of the values and stores them in files.  
 This is a Python 3 script not compatible with Python 2.X.
 
 
