@@ -48,7 +48,7 @@ LIST_VNF_MS = []
 LIST_VNF_WAC = []
 
 # Constants
-CONF_FILE_PATH = 'snmp-agent-communications.conf'
+CONF_FILE_PATH = 'snmp-agent-communications.yml'
 
 
 # List of files to store variables
