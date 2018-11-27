@@ -3,10 +3,10 @@
 ## VNF descriptor.
 ##
 descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/master/function-descriptor/vnfd-schema.yml
-version: "vnfd-schema-01"
+version: "vnfd-schema-02"
 vendor: "quobis"
 name: "rp-vnf"
-version: "0.1"
+version: "0.2"
 author: "Ana Pol :@ QUOBIS"
 description: "Nginx"
 ##
@@ -58,10 +58,6 @@ virtual_links:
       - "vdu01:internal"
       - "cpinternal"
 
-# connectivity type
-# E-LAN = switch
-# E-Line = cable
-
 ##
 ## The VNF connection points to the
 ## outside world.
@@ -77,10 +73,10 @@ connection_points:
     interface: "ipv4"
     type: "internal"
 
-#function_specific_managers:
-#  - id: "sonfsmplugtestanritsucss1"
-#    description: "FSM to do a first FSM test"
-#    image: "sonatanfv/plugtest-anritsu-fsm-css"
-#    options:
-#      - key: "type"
-#        value: "start"
+function_specific_managers:
+ - id: "sonfsmcommunication-pilotrp-vnfcss1"
+   description: "FSM to do a first FSM test"
+   image: "anapolg/tng-rp-fsm:latest"
+   options:
+     - key: "type"
+       value: "start"
