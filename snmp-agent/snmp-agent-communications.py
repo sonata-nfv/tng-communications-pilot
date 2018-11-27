@@ -37,6 +37,8 @@ import easysnmp
 import yaml
 import os
 import threading
+import signal
+import sys
 from functools import partial
 import statistics
 import time
@@ -46,6 +48,9 @@ import time
 CONFIG= {}
 LIST_VNF_MS = []
 LIST_VNF_WAC = []
+# BW_INTERVAL is defined as a global variable 
+# to be able to call it form the signal handler
+BW_INTERVAL = None
 
 # Constants
 CONF_FILE_PATH = 'snmp-agent-communications.yml'
@@ -163,10 +168,19 @@ def load_config():
             # TODO check if mandatory fileds are present   
             return configuration   
 
+def signal_handler_terminate(sig, frame):
+        # Stop the threads gracefully
+        BW_INTERVAL.stop() 
+        sys.exit(0)
+
 # Read configuration
 
 if __name__ == "__main__":
-   
+    
+    # defining signal handlers to stop the script gracefully
+    signal.signal(signal.SIGINT, signal_handler_terminate)
+    signal.signal(signal.SIGTERM, signal_handler_terminate)
+
     CONFIG = load_config()
     
     # Check that the path exists
@@ -184,26 +198,18 @@ if __name__ == "__main__":
         LIST_VNF_WAC.append({'snmp_session':snmp_session_instance})
     
     filename = CONFIG['stats_file_path'] + CONFIG['bw_file']
-    bw_interval = Interval(CONFIG['polling_interval'], calculate_mean_bw, args=[LIST_VNF_MS,CONFIG['oid_media_network_interface'],filename,CONFIG['polling_interval']])
+    BW_INTERVAL = Interval(CONFIG['polling_interval'], calculate_mean_bw, args=[LIST_VNF_MS,CONFIG['oid_media_network_interface'],filename,CONFIG['polling_interval']])
     
     #print ("Starting Interval, press CTRL+C to stop. Used interval: " + str(CONFIG['polling_interval']))
-    bw_interval.start() 
+    BW_INTERVAL.start() 
 
+    # loop to be able to capture the signals and stops the threads
+    while True:
+        time.sleep(1)
+   
 
-    # while True:
-    #     try:
-    #         time.sleep(0.1)
-    #     except KeyboardInterrupt:
-    #         print("Shutting down interval ...")
-    #         bw_interval.stop()
-    #         break
-
-
-
-# PL and JITTER
+# TODO PL and JITTER
 
 ## Janus will already provide the PL and Jitter for each call
 ## need to get all the values for all the current calls and then calculate the mean. 
 ## analyze what to do for inbound and outbound streams.
-
-
