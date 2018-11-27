@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 #  Copyright (c) 2018 SONATA-NFV, 5GTANGO, UBIWHERE, QUOBIS SL.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -106,16 +108,11 @@ def calculate_bw(oid, interval, session, bw_previous_octects):
     the interval. Finally it is divided by the interval in seconds to
     get the average rate in bits per second
     """
-    # print("within calculate_BW session object value: ")
+    
     interface_octects = session.get(oid)
-    # print(interface_octects.value)
-    # check if the value is valid
+    # TODO check if the value is valid
     delta_bw = int(interface_octects.value) - int(bw_previous_octects)
     bw_value = delta_bw * 8 / interval 
-    # print("bw_previous_octects: " + str(bw_previous_octects))
-    # print("interface_octects.value: " + str(interface_octects.value))
-    # print("delta_bw: " + str(delta_bw))
-    #bw_value = int(delta_bw)
 
     return int(bw_value),int(interface_octects.value)
     
@@ -130,7 +127,7 @@ def calculate_mean_bw(list_vnf_ms,oid,filename,polling_interval):
 
     #print("Mean value: "+str(mean(bw_current_values))+" bps")
     write_stat_in_file(filename, str(statistics.mean(bw_current_values)))
-    return #str(mean(bw_current_values))
+    return
 
 
 def write_stat_in_file(filename, value):
@@ -189,7 +186,7 @@ if __name__ == "__main__":
     filename = CONFIG['stats_file_path'] + CONFIG['bw_file']
     bw_interval = Interval(CONFIG['polling_interval'], calculate_mean_bw, args=[LIST_VNF_MS,CONFIG['oid_media_network_interface'],filename,CONFIG['polling_interval']])
     
-    print ("Starting Interval, press CTRL+C to stop. Used interval: " + str(CONFIG['polling_interval']))
+    #print ("Starting Interval, press CTRL+C to stop. Used interval: " + str(CONFIG['polling_interval']))
     bw_interval.start() 
 
 
