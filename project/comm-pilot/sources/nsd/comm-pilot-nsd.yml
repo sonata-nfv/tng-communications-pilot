@@ -70,3 +70,11 @@ virtual_links:
       - "vnf_bs:cpinternal"
       - "vnf_ds:cpinternal"
       - "vnf_ms:cpinternal"
+
+service_specific_managers:
+  - id: "sonssmcommunication-pilotconfig"
+    description: "SSM to do a first SSM test"
+    image: "anapolg/tng-vc-ssm:latest"
+    options:
+      - key: "type"
+        value: "task"
