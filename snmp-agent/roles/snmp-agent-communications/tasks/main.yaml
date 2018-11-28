@@ -1,0 +1,83 @@
+
+# - name: Print some debug information 
+#   vars: 
+#     msg: |
+#       #   Module Variables ("vars"):
+#       #   --------------------------------
+#       #   {{ vars | to_nice_json }} 
+
+#       #   Environment Variables ("environment"):
+#       #   --------------------------------
+#       #   {{ environment | to_nice_json }} 
+
+#         GROUP NAMES Variables ("group_names"):
+#         --------------------------------
+#         {{ group_names | to_nice_json }}
+
+#       #   GROUPS Variables ("groups"):
+#       #   --------------------------------
+#       #   {{ groups | to_nice_json }}
+
+#       #   HOST Variables ("hostvars"):
+#       #   --------------------------------
+#       #   {{ hostvars | to_nice_json }} 
+
+#   debug: 
+#     msg: "{{ msg.split('\n') }}"       
+#   tags: debug_info
+
+- name: Enable universe and multiverse repository
+  become: yes
+  apt_repository:
+      repo: "{{ item }}"
+  loop:
+      - "deb http://archive.ubuntu.com/ubuntu/ bionic universe"
+      - "deb http://archive.ubuntu.com/ubuntu/ bionic-updates universe"
+      - "deb http://security.ubuntu.com/ubuntu/ bionic-security universe"
+      - "deb http://archive.ubuntu.com/ubuntu/ bionic multiverse"
+      - "deb http://archive.ubuntu.com/ubuntu/ bionic-updates multiverse"
+      - "deb http://security.ubuntu.com/ubuntu/ bionic-security multiverse"
+
+- name: Install pip3
+  become: yes
+  apt:
+      update_cache: yes 
+      name: python3-pip    
+
+- name: install dependecies for Easysnmp
+  become: yes
+  apt:
+      name:
+          - libsnmp-dev
+          - snmp-mibs-downloader
+          - gcc
+          - python-dev
+
+- name: install pip easysnmp
+  pip:
+    name: easysnmp
+    executable: pip3
+
+- name: Create installation snmp-agent-communications directory
+#   become: yes
+  file: "path={{ snmp_installation_path }} state=directory mode=0755"
+
+- name: copy script and config
+  # become: yes
+  copy:
+      src:  snmp-agent-communications.py
+      dest: "{{ snmp_installation_path }}/snmp-agent-communications.py"
+      mode: 0755 
+
+- name: generate config and copy 
+#   become: yes
+  template: "src=snmp-agent-communications.yml.j2 dest={{ snmp_installation_path }}/snmp-agent-communications.yml mode=644"
+
+- name: snmp-agent-communication | Create Unit file
+  become: yes
+  template: src=snmp-agent-communication.service.j2 dest=/lib/systemd/system/snmp-agent-communication.service mode=644
+  notify:
+     - reload systemctl
+
+# - name: snmp-agent-communication | Start script
+#   service: name=teamcity.service state=started enabled=yes

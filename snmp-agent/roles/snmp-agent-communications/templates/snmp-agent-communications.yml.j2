@@ -1,0 +1,21 @@
+vnf-wac:
+ - 192.168.56.102
+ 
+vnf-ms:
+ - 192.168.56.102
+ - 192.168.56.102
+
+security_level: auth_with_privacy
+security_username: {{ snmp_security_username }}
+auth_protocol: {{snmp_auth_protocol}} 
+auth_password: {{ snmp_auth_password }}
+privacy_protocol: {{snmp_privacy_protocol }}
+privacy_password: {{ snmp_privacy_password }} 
+
+oid_media_network_interface: {{ snmp_network_oid }}
+polling_interval: {{ snmp_polling_interval }}
+
+stats_file_path : /tmp/
+bw_file : bw.txt
+pl_file : pl.txt
+jitter_file : jitter.txt

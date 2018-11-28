@@ -1,0 +1,12 @@
+[Unit]
+Description=Quobis SNMP Agent Communication
+Requires=network.target
+After=syslog.target network.target
+[Service]
+Type=simple
+Environment=SNMP_CONF_FILE={{ snmp_installation_path }}/snmp-agent-communications.yml
+ExecStart={{ snmp_installation_path }}/snmp-agent-communications.py
+User={{ snmp_execution_user }}
+PIDFile=/tmp/snmp-agent-communications.pid
+[Install]
+WantedBy=multi-user.target
