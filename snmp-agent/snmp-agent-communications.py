@@ -52,16 +52,6 @@ LIST_VNF_WAC = []
 # to be able to call it form the signal handler
 BW_INTERVAL = None
 
-# Constants
-CONF_FILE_PATH = 'snmp-agent-communications.yml'
-
-
-# List of files to store variables
-STATS_FILE_PATH = '/var/communications/'
-BW_FILE = 'bw.txt'
-PL_FILE = 'pl.txt'
-JITTER_FILE = 'jitter.txt'
-
 
 class Interval(object):
 
@@ -113,12 +103,16 @@ def calculate_bw(oid, interval, session, bw_previous_octects):
     the interval. Finally it is divided by the interval in seconds to
     get the average rate in bits per second
     """
-    
     interface_octects = session.get(oid)
+
     # TODO check if the value is valid
     delta_bw = int(interface_octects.value) - int(bw_previous_octects)
     bw_value = delta_bw * 8 / interval 
 
+    # sending 0 as the first value to avoid giving incorrect values 
+    if int(bw_previous_octects) is 0:
+        return 0,int(interface_octects.value)
+ 
     return int(bw_value),int(interface_octects.value)
     
 def calculate_mean_bw(list_vnf_ms,oid,filename,polling_interval):
@@ -150,21 +144,24 @@ def read_stat_in_file(filename):
     file_fh = open(filename,'r')
     return int(file_fh.read())
 
-def load_config():
+def load_config(conf_filename):
         """Loads the configuration file.
             Loads all VNFs which are going to be monitored
             the configuration file is expected to be updated automatically
             by the SSM when a new VNF is added/Removed for scale-out scale-in .
         """
-        if not os.path.exists(CONF_FILE_PATH):
-            configuration = {}
-            return configuration
+        if not conf_filename:
+             print("Configuration file must be defined in an environment variable called SNMP_CONF_FILE")
+             sys.exit(1)
+        if not os.path.exists(conf_filename):
+            print("Defined configuration: " + str(conf_filename) + " not found")
+            sys.exit(1) 
 
-        with open(CONF_FILE_PATH, "r") as config_file:
+        with open(conf_filename, "r") as config_file:
             configuration = yaml.load(config_file)
             if not configuration:
-               configuration = {}
-               return configuration
+                print("Invalid configuration file.")
+                sys.exit(1)
             # TODO check if mandatory fileds are present   
             return configuration   
 
@@ -173,17 +170,17 @@ def signal_handler_terminate(sig, frame):
         BW_INTERVAL.stop() 
         sys.exit(0)
 
-# Read configuration
-
 if __name__ == "__main__":
     
     # defining signal handlers to stop the script gracefully
     signal.signal(signal.SIGINT, signal_handler_terminate)
     signal.signal(signal.SIGTERM, signal_handler_terminate)
-
-    CONFIG = load_config()
+   
+    # getting conf file name from environment variable and loading it   
+    conf_filename=os.environ.get('SNMP_CONF_FILE') 
+    CONFIG = load_config(conf_filename)
     
-    # Check that the path exists
+    # Check that the path for the stats files exists and has permissions
     if not os.path.exists(CONFIG['stats_file_path']):
         os.makedirs(CONFIG['stats_file_path'])
 
