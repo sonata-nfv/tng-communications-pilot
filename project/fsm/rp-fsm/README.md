@@ -1,12 +1,9 @@
-## Implementation
-This FSM was implemented in Python 3.4
-
 [![Join the chat at https://gitter.im/sonata-nfv/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sonata-nfv/Lobby)
 
 <p align="center"><img src="https://github.com/sonata-nfv/tng-communications-pilot/wiki/images/sonata-5gtango-logo-500px.png" /></p>
 
 # FSM
-This contains all the FSMs used by the communications pilot. They will be used to configure all the VNFs during the instantiation process.
+This folder contains all the FSMs used by the communications pilot. They were implemented in Python 3.4 and they will be used to configure all the VNFs during the instantiation process.
 
 ## Folder structure
 
