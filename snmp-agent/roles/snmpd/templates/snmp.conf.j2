@@ -1,0 +1,104 @@
+###############################################################################
+#
+#  AGENT BEHAVIOUR
+#
+
+#  Listen for connections from the local system only
+#agentAddress  udp:127.0.0.1:161
+#  Listen for connections on all interfaces (both IPv4 *and* IPv6)
+#agentAddress udp:161,udp6:[::1]:161
+agentAddress udp:161
+
+###############################################################################
+
+
+###############################################################################
+
+###############################################################################
+#
+#  ACCESS CONTROL
+#
+
+                                                 #  system + hrSystem groups only
+view   systemonly  included   .1.3.6.1.2.1.1
+view   systemonly  included   .1.3.6.1.2.1.25.1
+
+                                                 #  Full access from the local host
+#rocommunity public  localhost
+                                                 #  Default access to basic system info
+ rocommunity public  default    -V systemonly
+                                                 #  rocommunity6 is for IPv6
+ rocommunity6 public  default   -V systemonly
+
+                                                 #  Full access from an example network
+                                                 #     Adjust this network address to match your local
+                                                 #     settings, change the community string,
+                                                 #     and check the 'agentAddress' setting above
+#rocommunity secret  10.0.0.0/16
+
+                                                 #  Full read-only access for SNMPv3
+ rouser  {{ snmp_security_username }} priv
+                                                 #  Full write access for encrypted requests
+                                                 #     Remember to activate the 'createUser' lines above
+#rwuser   authPrivUser   priv
+
+#  It's no longer typically necessary to use the full 'com2sec/group/access' configuration
+#  r[ow]user and r[ow]community, together with suitable views, should cover most requirements
+
+
+###############################################################################
+# System contact information
+#
+
+# It is also possible to set the sysContact and sysLocation system
+# variables through the snmpd.conf file:
+
+#syslocation Unknown (edit /etc/snmp/snmpd.conf)
+#syscontact Root <root@localhost> (configure /etc/snmp/snmp.local.conf)
+
+syslocation {{ locationName }}
+syscontact {{ contactName }} {{ contactEmail }}
+
+# Example output of snmpwalk:
+#   % snmpwalk -v 1 localhost -c public system
+#   system.sysDescr.0 = "SunOS name sun4c"
+#   system.sysObjectID.0 = OID: enterprises.ucdavis.ucdSnmpAgent.sunos4
+#   system.sysUpTime.0 = Timeticks: (595637548) 68 days, 22:32:55
+#   system.sysContact.0 = "Me <me@somewhere.org>"
+#   system.sysName.0 = "name"
+#   system.sysLocation.0 = "Right here, right now."
+#   system.sysServices.0 = 72
+
+###############################################################################
+# Logging
+#
+
+# We do not want annoying "Connection from UDP: " messages in syslog.
+# If the following option is commented out, snmpd will print each incoming
+# connection, which can be useful for debugging.
+
+dontLogTCPWrappersConnects yes
+
+# -----------------------------------------------------------------------------
+
+###############################################################################
+# disk checks
+#
+
+# The agent can check the amount of available disk space, and make
+# sure it is above a set limit.
+
+# disk PATH [MIN=100000]
+#
+# PATH:  mount path to the disk in question.
+# MIN:   Disks with space below this value will have the Mib's errorFlag set.
+#        Default value = 100000.
+
+# Check the / partition and make sure it contains at least 10 megs.
+# VMTurbo Note: Use '/' if the VMs are on local storage and
+# '/var/lib/nova/instances' if the VMs are on shared storage
+
+disk / 15%
+disk /root 15%
+disk /var/log 15%
+includeAllDisks  10%
