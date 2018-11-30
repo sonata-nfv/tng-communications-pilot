@@ -1,0 +1,15 @@
+---
+snmp_installation_path: /home/quobis/snmp-agent-communications
+snmp_network_oid: .1.3.6.1.2.1.2.2.1.11.2
+snmp_polling_interval: 30
+snmp_security_username: quobis-snmp
+# password must have at least 8 chars
+snmp_auth_password: 5gt4ng00
+snmp_privacy_password: 5gt4ng00
+snmp_auth_protocol: SHA
+snmp_privacy_protocol: AES
+snmp_execution_user: quobis
+community_name: 'quobis'
+locationName: 'Spain'
+contactName: 'Quobis Networks'
+contactEmail: 'anton.roman@quobis.com'

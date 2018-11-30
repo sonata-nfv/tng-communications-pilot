@@ -1,0 +1,55 @@
+---
+- debug: 
+      msg: "System {{ inventory_hostname }} has uuid {{ ansible_product_uuid }} and ansible_hostname {{ ansible_hostname }}"
+
+- debug: var=ansible_facts
+
+
+- name: Install snmp, snmpd and libsnmp-dev
+  become: yes
+  apt:
+    name: "{{ item }}"
+    state: latest
+    force: yes
+  with_items:
+    - snmp
+    - snmpd
+    - libsnmp-dev
+
+- name: stop snmpd
+  become: yes
+  service:
+    name: snmpd
+    state: stopped
+
+- name: Deploy snmp template configuration for VNF-MS
+  become: yes
+  template:
+    src: templates/snmp.conf.j2
+    dest: /etc/snmp/snmpd.conf
+  when: host_type == "type-vnf-ms"
+
+- name: Deploy snmp template configuration for VNF-WAC
+  become: yes
+  template:
+    src: templates/snmp.conf-wac.j2
+    dest: /etc/snmp/snmpd.conf
+  when: host_type == "type-vnf-wac"
+
+- name: Deploy snmp template configuration  VNF-RP
+  become: yes
+  template:
+    src: templates/snmp.conf.j2
+    dest: /etc/snmp/snmpd.conf
+  when: host_type == "type-vnf-rp"
+
+
+- name: Create snmpv3 user
+  become: yes
+  raw: "net-snmp-create-v3-user  -ro -A {{ snmp_auth_password }} -a {{ snmp_auth_protocol }} -X {{ snmp_privacy_password }} -x {{ snmp_privacy_protocol }} {{ snmp_security_username }}"
+
+- name: start snmpd
+  become: yes
+  service:
+    name: snmpd
+    state: started
