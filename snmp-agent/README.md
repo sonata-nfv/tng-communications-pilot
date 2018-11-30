@@ -50,7 +50,9 @@ vnf-ms:
 ```
 
 3. **Media network interface OID.**
-This is the OID the interface which handles the media (the one which needs to be monitored to check the quality of the service). This parameter may depend on the final deployment, so please check that the OID corresponds with the interface which is handling the media. Using a different OID will prevent the system from scaling in and out according to the consumed BW. 
+This is the OID the interface which handles the media (the one which needs to be monitored to check the quality of the service).
+ **This parameter may depend on the final deployment, so please check that the OID corresponds to the interface which is handling the media. Using a different OID will prevent the system from scaling in and out according to the consumed BW.**
+
 ```
 oid_media_network_interface: .1.3.6.1.2.1.2.2.1.11.2
 ```
