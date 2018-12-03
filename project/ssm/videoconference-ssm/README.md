@@ -16,18 +16,35 @@ This contains the SSM used by the communications pilot. They were implemented in
 * amqp-storm
 
 ## Test SSM locally
-For now, the SSM has only one event defined, the task_event. In order to test it, we need the `tng-sdk-sm` tool and ...
+For now, the SSM has only one event defined, the task_event. In order to test it, we need the `tng-sdk-sm` tool and to create a `test-ssm.yml` file that will be used as the payload.
 
 **Generate the payload**
-1. ...
+1. Create the `test-ssm-yml` file with some random content like this:
+
+```
+schedule:
+  - 'a'
+  - 'b'
+  - 'c'
+  - 'd'
+  - 'e'
+  - 'f'
+  - 'g'
+  - 'h'
+  - 'i'
+  - 'j'
+```
 
 **task_event test**
-After this, the SS; can be tested with the following command:
 
-`tng-sm execute --event task --payload <path_to_payload_event> --path <path_fsm_folder>`
+After this, the SSM can be tested with the following command:
+
+`tng-sm execute --event task --payload <path_to_payload> --path <path_fsm_folder> <ssm_name>`
+
+The result printed should include `vnfs_config` in the 8 possition of the schedule.
 
 ## Build and publish the container
-Container can already be found published in `anapolg/tng-rp-fsm:latest`. In any form, to build and publish the container go to the fsm folder and execute:
+Container can already be found published in `anapolg/tng-videoconference-ssm:latest`. In any form, to build and publish the container go to the fsm folder and execute:
 
 ```
 docker build --no-cache -f videoconference-ssm/Dockerfile -t <name:tag> .
