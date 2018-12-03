@@ -79,6 +79,14 @@ dontLogTCPWrappersConnects yes
 # -----------------------------------------------------------------------------
 
 ###############################################################################
+#  Process Monitoring
+#
+proc {{ name_pm2_process }} 1 1
+# please, remember to set the environment variable Environment=PM2_DAEMON_TITLE=pm2-God-Daemon
+# in the pm2-root.service script 
+
+
+###############################################################################
 # disk checks
 #
 
