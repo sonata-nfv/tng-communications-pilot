@@ -49,9 +49,8 @@
 - name: snmp-agent-communication | Create Unit file
   become: yes
   template: src=snmp-agent-communication.service.j2 dest=/lib/systemd/system/snmp-agent-communication.service mode=644
-  notify:
-     - reload systemctl
 
 - name: snmp-agent-communication | Start and enable script
   become: yes
+  daemon_reload: yes
   service: name=snmp-agent-communication.service state=started enabled=yes

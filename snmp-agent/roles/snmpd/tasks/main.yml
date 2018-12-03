@@ -1,9 +1,6 @@
 ---
-- debug: 
-      msg: "System {{ inventory_hostname }} has uuid {{ ansible_product_uuid }} and ansible_hostname {{ ansible_hostname }}"
-
 - debug: var=ansible_facts
-
+- debug: var=vars
 
 - name: Install snmp, snmpd and libsnmp-dev
   become: yes
@@ -53,3 +50,18 @@
   service:
     name: snmpd
     state: started
+
+- name: Add env var to systemctl script of pm2 to monit process with snmpd
+  become: yes
+  lineinfile:
+    path: /etc/systemd/system/pm2-root.service
+    insertafter: "^Environment="
+    line: "Environment=PM2_DAEMON_TITLE={{ name_pm2_process }}"
+  when: host_type == "type-vnf-wac"
+
+
+- name: pm2-root | Start and enable script
+  become: yes
+  daemon_reload: yes
+  service: name=pm2-root.service state=restarted enabled=yes
+  when: host_type == "type-vnf-wac"

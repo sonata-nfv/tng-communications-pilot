@@ -13,3 +13,4 @@ community_name: 'quobis'
 locationName: 'Spain'
 contactName: 'Quobis Networks'
 contactEmail: 'anton.roman@quobis.com'
+name_pm2_process: pm2-God-Daemon

@@ -85,4 +85,18 @@ pl_file : pl.txt
 jitter_file : jitter.txt  
 ```
 
+## SNMP monitoring of processes
+The `snmpd` daemon also enables the monitoring of process and the check of the current values as OID variables. As a frst approach  to monitor the availability of the video-conference service the pm2 daemon is going to be monitored. This process is in charge of launching all the Node processes required to get the service working and also watchs the running processes to restart services when they crash. 
 
+In order to achieve this we only need to add one line per process in the file: `/etc/snmp/snmpd.conf`:
+
+`
+###############################################################################
+#  Process Monitoring
+#
+proc pm2-God-Daemon 1 1
+`
+
+**Note:** During our test we detected that the process names with whitespaces are not correctly monitored. In order to work around this we changed the name which is used to launch pm2 setting an environment variable in the systemctl script (`/etc/systemd/system/pm2-root.service`):
+
+`Environment=PM2_DAEMON_TITLE=pm2-God-Daemon`
