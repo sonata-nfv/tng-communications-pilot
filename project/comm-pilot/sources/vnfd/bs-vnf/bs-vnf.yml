@@ -19,12 +19,12 @@ virtual_deployment_units:
     vm_image_md5: "d5ab414b734040a5bbf8684347c2a1a6"
     resource_requirements:
       cpu:
-        vcpus: 1
+        vcpus: 2
       memory:
         size: 4
         size_unit: "GB"
       storage:
-        size: 30
+        size: 40
         size_unit: "GB"
     connection_points:
       - id: "mgmt"
