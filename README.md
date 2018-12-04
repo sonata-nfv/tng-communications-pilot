@@ -19,6 +19,9 @@ The communications pilot aims to elaborate on the usability of 5GTANGO platform 
 | `project/comm-pilot/sources/nsd` | Service descriptors |
 | `project/comm-pilot/sources/vnfd` | Function descriptors |
 | `project/scripts` | Scripts used to build the testing probes |
+| `project/fsm` | FSMs used to configure the VNFs |
+| `project/ssm` | SSM used to configure the NS |
+| `snmp-agent` | SNMP ansible deployement in the service |
 
 ## Use cases description
 
@@ -58,7 +61,8 @@ The network service is composed by 5 VNF which are:
 
 ## Test components 
 
-The following scripts are used to generate probes able to test the services: 
+The following scripts are used to generate probes able to test the services. More information about them can be found in the wiki page of the project. 
+* **users.py:** Python script used to generate or remove users through the service REST API. 
 
 
 ## Lead Developers
