@@ -63,7 +63,7 @@ The network service is composed by 5 VNF which are:
 
 The following scripts are used to generate probes able to test the services. More information about them can be found in the wiki page of the project. 
 * **users.py:** Python script used to generate or remove users through the service REST API. 
-
+* **check-registered-users.py:** Python script used to retrieve the number of registered users in the service.
 
 ## Lead Developers
 The following lead developers are responsible for this repository and have admin rights. They can, for example, merge pull requests.
