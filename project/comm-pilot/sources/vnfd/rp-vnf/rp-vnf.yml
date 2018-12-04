@@ -24,7 +24,7 @@ virtual_deployment_units:
         size: 2
         size_unit: "GB"
       storage:
-        size: 30
+        size: 20
         size_unit: "GB"
     connection_points:
       - id: "mgmt"
