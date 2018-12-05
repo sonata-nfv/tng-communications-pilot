@@ -4,12 +4,12 @@
   apt_repository:
       repo: "{{ item }}"
   loop:
-      - "deb http://archive.ubuntu.com/ubuntu/ bionic universe"
-      - "deb http://archive.ubuntu.com/ubuntu/ bionic-updates universe"
-      - "deb http://security.ubuntu.com/ubuntu/ bionic-security universe"
-      - "deb http://archive.ubuntu.com/ubuntu/ bionic multiverse"
-      - "deb http://archive.ubuntu.com/ubuntu/ bionic-updates multiverse"
-      - "deb http://security.ubuntu.com/ubuntu/ bionic-security multiverse"
+      - "deb http://archive.ubuntu.com/ubuntu/ xenial universe"
+      - "deb http://archive.ubuntu.com/ubuntu/ xenial-updates universe"
+      - "deb http://security.ubuntu.com/ubuntu/ xenial-security universe"
+      - "deb http://archive.ubuntu.com/ubuntu/ xenial multiverse"
+      - "deb http://archive.ubuntu.com/ubuntu/ xenial-updates multiverse"
+      - "deb http://security.ubuntu.com/ubuntu/ xenial-security multiverse"
 
 - name: Install pip3
   become: yes
@@ -50,7 +50,11 @@
   become: yes
   template: src=snmp-agent-communication.service.j2 dest=/lib/systemd/system/snmp-agent-communication.service mode=644
 
+- name: reload systemd
+  become: yes
+  command: systemctl daemon-reload
+ 
 - name: snmp-agent-communication | Start and enable script
   become: yes
-  daemon_reload: yes
+  #daemon_reload: yes
   service: name=snmp-agent-communication.service state=started enabled=yes
