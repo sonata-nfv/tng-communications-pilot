@@ -74,7 +74,7 @@ virtual_links:
 service_specific_managers:
   - id: "sonssmcommunication-pilotconfig"
     description: "SSM to do a first SSM test"
-    image: "anapolg/tng-vc-ssm:latest"
+    image: "anapolg/tng-videoconference-ssm:latest"
     options:
       - key: "type"
         value: "task"
