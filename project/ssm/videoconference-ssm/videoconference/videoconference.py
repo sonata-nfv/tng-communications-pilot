@@ -104,16 +104,16 @@ class videoconferenceSSM(smbase):
         # the 'ssm_type' field in the content indicates for which type of
         # ssm this message is intended.
         if str(request["ssm_type"]) == "placement":
-            LOG.info("Start event received: " + str(request["content"]))
-            response = self.placement_event(request["content"])
+            LOG.info("Start event received: " + str(request))
+            response = self.placement_event(request)
 
         if str(request["ssm_type"]) == "task":
-            LOG.info("Stop event received: " + str(request["content"]))
-            response = self.task_event(request["content"])
+            LOG.info("Task event received: " + str(request))
+            response = self.task_event(request)
 
         if str(request["ssm_type"]) == "configure":
-            LOG.info("Config event received: " + str(request["content"]))
-            response = self.configure_event(request["content"])
+            LOG.info("Config event received: " + str(request))
+            response = self.configure_event(request)
 
         # If a response message was generated, send it back to the FLM
         LOG.info("Response to request generated:" + str(response))
