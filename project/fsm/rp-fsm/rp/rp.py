@@ -35,7 +35,10 @@ partner consortium (www.5gtango.eu).
 import logging
 import yaml
 from smbase.smbase import smbase
-from ssh import Client
+try:
+    from rp import ssh
+except:
+    import ssh
 
 logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger("fsm-start-stop-configure")
