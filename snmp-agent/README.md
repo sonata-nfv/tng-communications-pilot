@@ -100,3 +100,10 @@ proc pm2-God-Daemon 1 1
 **Note:** During our test we detected that the process names with whitespaces are not correctly monitored. In order to work around this we changed the name which is used to launch pm2 setting an environment variable in the systemctl script (`/etc/systemd/system/pm2-root.service`):
 
 `Environment=PM2_DAEMON_TITLE=pm2-God-Daemon`
+
+##How to test if the the SNMP server is currently configured
+
+`snmpwalk -v 3 -l authPriv -u "quobis-snmp" -a sha -A "5gt4ng00" -x aes -X "5gt4ng00" "192.168.56.101" .1.3.6.1.2.1.2.2.1.11`
+
+For example, to get the value of the BW which is being consumed by all the VNF-MS instances, it is necessary to access the MIB below:
+`snmpwalk -v 3 -l authPriv -u "quobis" -a sha -A "asterisk" -x aes -X "asterisk" "192.168.56.102" 'NET-SNMP-EXTEND-MIB::nsExtendOutNumLines."consumedBWVNFMS"'`

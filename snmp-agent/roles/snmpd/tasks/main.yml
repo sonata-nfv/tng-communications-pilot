@@ -36,7 +36,7 @@
 - name: Deploy snmp template configuration  VNF-RP
   become: yes
   template:
-    src: templates/snmp.conf.j2
+    src: templates/snmp-rp.conf.j2
     dest: /etc/snmp/snmpd.conf
   when: host_type == "type-vnf-rp"
 
