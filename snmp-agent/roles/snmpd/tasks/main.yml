@@ -60,8 +60,12 @@
   when: host_type == "type-vnf-wac"
 
 
+- name: reload systemd
+  become: yes
+  command: systemctl daemon-reload
+ 
 - name: pm2-root | Start and enable script
   become: yes
-  daemon_reload: yes
+  #daemon_reload: yes
   service: name=pm2-root.service state=restarted enabled=yes
   when: host_type == "type-vnf-wac"
