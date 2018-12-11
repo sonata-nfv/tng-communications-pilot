@@ -29,7 +29,8 @@ In order to access the instantiated VNF, the user needs to include the `sandbox.
 **Start test**
 After this, the FSM can be tested with the following command:
 
-`tng-sm execute --event start --payload <path_to_payload_event> <path_fsm_folder>`
+ `tng-sm execute --path <path_to_fsm> --event <event> --payload <path_to_payload_file> <fsm_name>`
+
 
 ## Build and publish the container
 Container can already be found published in `anapolg/tng-rp-fsm:latest`. In any form, to build and publish the container go to the fsm folder and execute:

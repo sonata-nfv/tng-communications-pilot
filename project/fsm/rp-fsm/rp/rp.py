@@ -134,12 +134,13 @@ class rpFSM(smbase):
         """
 
         # Extract the mgmt ip of the VNF from the VNFR
+        LOG.info("VNFs config: " + str(content))
         vnfc = content['vnfr']['virtual_deployment_units'][0]['vnfc_instance'][0]
         mgmt_ip = vnfc['connection_points'][0]['interface']['address']
 
         # Initiate SSH connection with the VM
-        ssh_client = Client(mgmt_ip, username='ubuntu', logger=LOG,
-                            key_filename='./sandbox.pem')
+        ssh_client = ssh.Client(mgmt_ip, username='ubuntu', logger=LOG,
+                                key_filename='./sandbox.pem')
 
         # Execute dummy command on remote
         ssh_client.sendCommand("mkdir foo")
