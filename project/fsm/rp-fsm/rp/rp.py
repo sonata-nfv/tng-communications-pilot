@@ -34,6 +34,7 @@ partner consortium (www.5gtango.eu).
 
 import logging
 import yaml
+import time
 from smbase.smbase import smbase
 try:
     from rp import ssh
@@ -130,22 +131,41 @@ class rpFSM(smbase):
 
     def start_event(self, content):
         """
-        This method handles a start event.
+        This method handles a start event. The start_event configures the nginx so that 
+        it can reach the VNF-WAC in the service.
         """
 
         # Extract the mgmt ip of the VNF from the VNFR
-        LOG.info("VNFs config: " + str(content))
+        LOG.info("VNFs config data: " + str(content))
         vnfc = content['vnfr']['virtual_deployment_units'][0]['vnfc_instance'][0]
         mgmt_ip = vnfc['connection_points'][0]['interface']['address']
 
-        # Initiate SSH connection with the VM
-        ssh_client = ssh.Client(mgmt_ip, username='ubuntu', logger=LOG,
-                                key_filename='./sandbox.pem')
+        i = 1
+        while i < 25:
+            try:
+                # Initiate SSH connection with the VM
+                ssh_client = ssh.Client(mgmt_ip, username='ubuntu', logger=LOG,
+                                        key_filename='./sandbox.pem')
 
-        # Execute dummy command on remote
-        ssh_client.sendCommand("mkdir foo")
+                # Enable user ubuntu in tmp folder
+                ssh_client.sendCommand("sudo chown -R ubuntu:ubuntu /tmp/")
 
-        # Dummy content
+                # Remove server IP address
+                ssh_client.sendCommand(
+                    "sudo sed  -i -r '/server ((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|\s|$)){4}.*$/d' /etc/nginx/sites-enabled/wac-nginx.conf")
+
+                # Include VNF-WAC IP address
+                ssh_client.sendCommand("sudo sed -i '/hash \$remote\_addr\;/ a " +
+                                       "\  server " + "ip" + " max_fails=2 fail_timeout=5s;" + "' /etc/nginx/sites-enabled/wac-nginx.conf")
+
+                # Restart the service with new configuration applied
+                ssh_client.sendCommand("sudo systemctl restart nginx")
+                break
+            except:
+                LOG.info("Retry ssh, current attempt: " + str(i))
+                i = i + 1
+                time.sleep(10)
+
         response = {'status': 'completed'}
         return response
 
@@ -160,7 +180,8 @@ class rpFSM(smbase):
 
     def configure_event(self, content):
         """
-        This method handles a configure event.
+        This method handles a configure event. The configure event changes the configuration 
+        of the nginx whenever a new VNF-WAC or VNF-MS is added or removed from the system.
         """
 
         # Dummy content
