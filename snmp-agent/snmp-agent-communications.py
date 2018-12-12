@@ -103,6 +103,7 @@ def calculate_bw(oid, interval, session, bw_previous_octects):
     the interval. Finally it is divided by the interval in seconds to
     get the average rate in bits per second
     """
+    # TODO add exception to this
     interface_octects = session.get(oid)
 
     # TODO check if the value is valid
@@ -128,11 +129,31 @@ def calculate_mean_bw(list_vnf_ms,oid,filename,polling_interval):
     write_stat_in_file(filename, str(statistics.mean(bw_current_values)))
     return
 
+def get_and_write_WAC_provisioned_and_registered_users(list_vnf_wac, oid_registered, oid_provisioned, filename_registered, filename_provisioned):
+    """
+    get provisioned and registered users from the WAC.
+    Since the VNF-WAC gets the value from a single DB from VNF-BS 
+    it is not necessary to check all of VNF-WAC instances  
+    """ 
+    
+    # TODO add exception to this
+    # We only get the value from the 1st WAC as all of them are exected to be the same
+
+    for vnf_wac_instance_dict in list_vnf_wac:
+        registered_users = vnf_wac_instance_dict['snmp_session'].get(oid_registered)
+        provisioned_users = vnf_wac_instance_dict['snmp_session'].get(oid_provisioned)
+
+    write_stat_in_file(filename_registered, str(registered_users.value))
+    write_stat_in_file(filename_provisioned, str(provisioned_users.value))
+
+    return 
+
 
 def write_stat_in_file(filename, value):
     """
     write the current stat value in the defined file
     """
+    # TODO capture errors
     file_fh = open(filename,'w')
     file_fh.write(str(value))
 
@@ -141,6 +162,7 @@ def read_stat_in_file(filename):
     """
     read the previous stat value from the defined file
     """
+    # TODO capture errors
     file_fh = open(filename,'r')
     return int(file_fh.read())
 
@@ -199,6 +221,12 @@ if __name__ == "__main__":
     
     #print ("Starting Interval, press CTRL+C to stop. Used interval: " + str(CONFIG['polling_interval']))
     BW_INTERVAL.start() 
+    
+    filename_registered = CONFIG['stats_file_path'] + CONFIG['wac_registered_file']
+    filename_provisioned = CONFIG['stats_file_path'] + CONFIG['wac_provisioned_file']
+    WAC_INTERVAL = Interval(CONFIG['polling_interval'], get_and_write_WAC_provisioned_and_registered_users, args=[LIST_VNF_WAC,CONFIG['oid_wac_registered_users'],CONFIG['oid_wac_provisioned_users'],filename_registered,filename_provisioned])
+    
+    WAC_INTERVAL.start()
 
     # loop to be able to capture the signals and stops the threads
     while True:

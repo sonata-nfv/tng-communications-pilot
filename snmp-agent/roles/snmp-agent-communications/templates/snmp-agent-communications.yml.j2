@@ -13,9 +13,13 @@ privacy_protocol: {{snmp_privacy_protocol }}
 privacy_password: {{ snmp_privacy_password }} 
 
 oid_media_network_interface: {{ snmp_network_oid }}
+oid_wac_registered_users:{{ snmp_wac_registered_oid }}
+oid_wac_provisioned_users: {{ snmp_wac_provisioned_oid }}
 polling_interval: {{ snmp_polling_interval }}
 
 stats_file_path : /tmp/
 bw_file : bw.txt
 pl_file : pl.txt
 jitter_file : jitter.txt
+wac_registered_file: registered-WAC-users.txt
+wac_provisioned_file: provisioned-WAC-users.txt

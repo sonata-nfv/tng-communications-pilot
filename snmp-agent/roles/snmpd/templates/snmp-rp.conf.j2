@@ -86,8 +86,10 @@ dontLogTCPWrappersConnects yes
 #  EXTENDING MIB TO SUPPORT COMMUNICATION PILOT SPECIFIC VARIABLES
 #
 extend    consumedBWVNFMS /bin/cat tmp/bw.txt
-#extend    provisionedWACusers /bin/cat tmp/pl.txt
-#extend    provisionedWACusers /bin/cat tmp/jitter.txt
+extend    provisionedWACusers /bin/cat tmp/provisioned-WAC-users.txt
+extend    registeredWACusers /bin/cat tmp/registered-WAC-users.txt
+extend    currentPacketLoss /bin/cat tmp/pl.txt
+extend    currentJitter /bin/cat tmp/jitter.txt
 
 
 ###############################################################################

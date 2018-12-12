@@ -85,6 +85,15 @@ proc {{ name_pm2_process }} 1 1
 # please, remember to set the environment variable Environment=PM2_DAEMON_TITLE=pm2-God-Daemon
 # in the pm2-root.service script 
 
+###############################################################################
+#
+#  EXTENDING MIB TO SUPPORT COMMUNICATION PILOT SPECIFIC VARIABLES
+#
+# Checking the DB from this script is not very safe as the DB can suffer attacks from external 
+# servers
+extend    provisionedWACusers  {{ wac_scripts_installation_path }}/check-provisioned-users.py
+extend    registeredWACusers {{ wac_scripts_installation_path }}/check-registered-users.py
+
 
 ###############################################################################
 # disk checks

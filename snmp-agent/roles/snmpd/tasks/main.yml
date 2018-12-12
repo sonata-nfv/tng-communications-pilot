@@ -33,6 +33,43 @@
     dest: /etc/snmp/snmpd.conf
   when: host_type == "type-vnf-wac"
 
+- name: Install pip3 
+  become: yes
+  apt:
+      update_cache: yes 
+      name: python3-pip  
+  when: host_type == "type-vnf-wac"
+
+- name: install pymongo for the scripts
+  become: yes
+  become_flags: '-H' 
+  pip:
+    name: pymongo
+    executable: pip3
+  when: host_type == "type-vnf-wac"
+
+- name: Create  SNMP scripts directory in WAC
+#   become: yes
+  file: "path={{ wac_scripts_installation_path }} state=directory mode=0755"
+  when: host_type == "type-vnf-wac"
+
+- name: copy script to check registered users 
+  # become: yes
+  copy:
+      src:  "{{ playbook_dir }}/../project/scripts/check-registered-users.py"
+      dest: "{{ wac_scripts_installation_path }}/check-registered-users.py"
+      mode: 0755 
+  when: host_type == "type-vnf-wac"
+
+- name: copy script to check provisioned users 
+  # become: yes
+  copy:
+      src:  "{{ playbook_dir }}/../project/scripts/check-provisioned-users.py"
+      dest: "{{ wac_scripts_installation_path }}/check-provisioned-users.py"
+      mode: 0755 
+  when: host_type == "type-vnf-wac"
+
+
 - name: Deploy snmp template configuration  VNF-RP
   become: yes
   template:
@@ -49,7 +86,7 @@
   become: yes
   service:
     name: snmpd
-    state: started
+    state: restarted
 
 - name: Add env var to systemctl script of pm2 to monit process with snmpd
   become: yes

@@ -143,3 +143,25 @@ In order to achieve this we only need to add one line per process in the file: `
 
 For example, to get the value of the BW which is being consumed by all the VNF-MS instances, it is necessary to access the MIB below:
 `snmpwalk -v 3 -l authPriv -u "quobis" -a sha -A "asterisk" -x aes -X "asterisk" "192.168.56.102" 'NET-SNMP-EXTEND-MIB::nsExtendOutNumLines."consumedBWVNFMS"'`
+
+## How to acces the extended MIB variables
+In order to include the variables neede for this project we used the extended MIB feature of `snmpd`. This is done by adding "extended" lines to `/etc/snmp/snmpd.conf` file.
+
+The table below includes the OID of custom variables added for this project:
+
+|Variable name|MIB name|OID|Description|
+|---|---|---|---|
+|Number of registered users in WAC|NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"registeredWACusers\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2. 18.114.101.103.105.115.116.101.114.101.100.87.65.67.117.115.101.114.115 |
+|Number of registered users in WAC|NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"provisionedWACusers\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2. 19.112.114.111.118.105.115.105.111.110.101.100.87.65.67.117.115.101.114.115|
+|Current value of BW|NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"consumedBWVNFMS\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2. 15.99.111.110.115.117.109.101.100.66.87.86.78.70.77.83|
+|Current value of Jitter|NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"currentJitter\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2. 13.99.117.114.114.101.110.116.74.105.116.116.101.114|
+|Current value of packet Loss|NET-SNMP-EXTEND-MIB::nsExtendOutputFull."currentPacketLoss"|.1.3.6.1.4.1.8072.1.3.2.3.1.2. 17.99.117.114.114.101.110.116.80.97.99.107.101.116.76.111.115.115|
+
+
+In case of finding any issue with the correspondig OID, it is possible to use the command `snmptranslate`:
+``
+snmptranslate -On NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"currentPacketLoss\"
+.1.3.6.1.4.1.8072.1.3.2.3.1.2.17.99.117.114.114.101.110.116.80.97.99.107.101.116.76.111.115.115
+``
+
+
