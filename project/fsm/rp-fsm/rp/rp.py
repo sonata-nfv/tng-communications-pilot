@@ -177,9 +177,11 @@ class rpFSM(smbase):
         i = 1
         while i < 25:
             try:
+                time.sleep(100)
+
                 # Initiate SSH connection with the VM
                 ssh_client = ssh.Client(rp_ip, username='ubuntu', logger=LOG,
-                                        key_filename='./sandbox.pem')
+                                        key_filename='/root/rp/sandbox.pem')
 
                 # Enable user ubuntu in tmp folder
                 ssh_client.sendCommand("sudo chown -R ubuntu:ubuntu /tmp/")
