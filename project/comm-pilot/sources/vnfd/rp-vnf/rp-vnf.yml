@@ -79,4 +79,4 @@ function_specific_managers:
    image: "anapolg/tng-rp-fsm:latest"
    options:
      - key: "type"
-       value: "start"
+       value: "configure"

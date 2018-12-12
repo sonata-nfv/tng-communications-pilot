@@ -131,41 +131,10 @@ class rpFSM(smbase):
 
     def start_event(self, content):
         """
-        This method handles a start event. The start_event configures the nginx so that 
-        it can reach the VNF-WAC in the service.
+        This method handles a start event.
         """
 
-        # Extract the mgmt ip of the VNF from the VNFR
-        LOG.info("VNFs config data: " + str(content))
-        vnfc = content['vnfr']['virtual_deployment_units'][0]['vnfc_instance'][0]
-        mgmt_ip = vnfc['connection_points'][0]['interface']['address']
-
-        i = 1
-        while i < 25:
-            try:
-                # Initiate SSH connection with the VM
-                ssh_client = ssh.Client(mgmt_ip, username='ubuntu', logger=LOG,
-                                        key_filename='./sandbox.pem')
-
-                # Enable user ubuntu in tmp folder
-                ssh_client.sendCommand("sudo chown -R ubuntu:ubuntu /tmp/")
-
-                # Remove server IP address
-                ssh_client.sendCommand(
-                    "sudo sed  -i -r '/server ((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|\s|$)){4}.*$/d' /etc/nginx/sites-enabled/wac-nginx.conf")
-
-                # Include VNF-WAC IP address
-                ssh_client.sendCommand("sudo sed -i '/hash \$remote\_addr\;/ a " +
-                                       "\  server " + "ip" + " max_fails=2 fail_timeout=5s;" + "' /etc/nginx/sites-enabled/wac-nginx.conf")
-
-                # Restart the service with new configuration applied
-                ssh_client.sendCommand("sudo systemctl restart nginx")
-                break
-            except:
-                LOG.info("Retry ssh, current attempt: " + str(i))
-                i = i + 1
-                time.sleep(10)
-
+        # Dummy content
         response = {'status': 'completed'}
         return response
 
@@ -181,10 +150,56 @@ class rpFSM(smbase):
     def configure_event(self, content):
         """
         This method handles a configure event. The configure event changes the configuration 
-        of the nginx whenever a new VNF-WAC or VNF-MS is added or removed from the system.
+        of the nginx and modifies it whenever a new VNF-WAC or VNF-MS is added or removed 
+        from the system.
         """
 
-        # Dummy content
+        # Extract VNF-RP management IP and VNF-WAC internal IP
+        wac_ip = ''
+        rp_ip = ''
+
+        for vnfr in content['vnfrs']:
+            if vnfr['virtual_deployment_units'][0]['vdu_reference'][:3] == 'wac':
+                for cp in vnfr['virtual_deployment_units'][0]['vnfc_instance'][0]['connection_points']:
+                    if cp['id'] == 'internal':
+                        wac_ip = cp['interface']['address']
+                        break
+
+            if vnfr['virtual_deployment_units'][0]['vdu_reference'][:2] == 'rp':
+                for cp in vnfr['virtual_deployment_units'][0]['vnfc_instance'][0]['connection_points']:
+                    if cp['id'] == 'mgmt':
+                        rp_ip = cp['interface']['address']
+                        break
+
+        LOG.info('wac ip: ' + wac_ip)
+        LOG.info('rp ip: ' + rp_ip)
+
+        i = 1
+        while i < 25:
+            try:
+                # Initiate SSH connection with the VM
+                ssh_client = ssh.Client(rp_ip, username='ubuntu', logger=LOG,
+                                        key_filename='./sandbox.pem')
+
+                # Enable user ubuntu in tmp folder
+                ssh_client.sendCommand("sudo chown -R ubuntu:ubuntu /tmp/")
+
+                # Remove server IP address
+                ssh_client.sendCommand(
+                    "sudo sed  -i -r '/server ((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|\s|$)){4}.*$/d' /etc/nginx/sites-enabled/wac-nginx.conf")
+
+                # Include VNF-WAC IP address
+                ssh_client.sendCommand("sudo sed -i '/hash \$remote\_addr\;/ a " +
+                                       "\  server " + wac_ip + " max_fails=2 fail_timeout=5s;" + "' /etc/nginx/sites-enabled/wac-nginx.conf")
+
+                # Restart the service with new configuration applied
+                ssh_client.sendCommand("sudo systemctl restart nginx")
+                break
+            except:
+                LOG.info("Retry ssh, current attempt: " + str(i))
+                i = i + 1
+                time.sleep(10)
+
         response = {'status': 'completed'}
         return response
 
