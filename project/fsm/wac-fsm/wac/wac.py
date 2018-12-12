@@ -188,7 +188,7 @@ class wacFSM(smbase):
 
                 # Initiate SSH connection with the VM
                 ssh_client = ssh.Client(wac_ip, username='ubuntu', logger=LOG,
-                                        key_filename='/root/rp/sandbox.pem')
+                                        key_filename='/root/wac/sandbox.pem')
 
                 # Enable user ubuntu in tmp folder
                 ssh_client.sendCommand("sudo chown -R ubuntu:ubuntu /tmp/")
