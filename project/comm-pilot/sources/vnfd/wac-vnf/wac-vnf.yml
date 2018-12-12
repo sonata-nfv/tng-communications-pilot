@@ -66,10 +66,10 @@ connection_points:
     interface: "ipv4"
     type: "internal"
 
-#function_specific_managers:
-#  - id: "sonfsmplugtestanritsucss1"
-#    description: "FSM to do a first FSM test"
-#    image: "sonatanfv/plugtest-anritsu-fsm-css"
-#    options:
-#      - key: "type"
-#        value: "start"
+function_specific_managers:
+ - id: "sonfsmcommunication-pilotwac-vnfcss1"
+   description: "FSM to do a first FSM test"
+   image: "anapolg/tng-wac-fsm:latest"
+   options:
+     - key: "type"
+       value: "configure"
