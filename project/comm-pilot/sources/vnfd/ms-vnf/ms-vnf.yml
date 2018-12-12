@@ -71,3 +71,11 @@ connection_points:
   - id: "cpinternal"
     interface: "ipv4"
     type: "internal"
+
+function_specific_managers:
+ - id: "sonfsmcommunication-pilotms-vnfcss1"
+   description: "FSM to do a first FSM test"
+   image: "anapolg/tng-ms-fsm:latest"
+   options:
+     - key: "type"
+       value: "configure"
