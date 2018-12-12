@@ -184,6 +184,8 @@ class wacFSM(smbase):
         i = 1
         while i < 25:
             try:
+                time.sleep(100)
+
                 # Initiate SSH connection with the VM
                 ssh_client = ssh.Client(wac_ip, username='ubuntu', logger=LOG,
                                         key_filename='/root/rp/sandbox.pem')
