@@ -1,4 +1,3 @@
-
 #!/usr/bin/python3
 
 import os
@@ -9,7 +8,7 @@ DB_URI = os.environ['DB_URI']
 
 client = MongoClient('mongodb://' + DB_URI + ':27017/')
 db = client['wacDev']
-session_collection = db['session']
+user_collection = db['user']
 
-registered_users = session_collection.count({'to': -1})
-print(registered_users)
+provisioned_users = user_collection.count()
+print(provisioned_users)
