@@ -44,6 +44,38 @@ def post_new_user(token, user):
         return
     else:
         print("User " + user + " was created")
+        uid = json.loads(response.content.decode('utf-8'))["id"]
+        post_basic_credential(token, user, uid)
+        return
+
+
+def post_basic_credential(token, username, uid):
+    url = SAPI_ENDPOINT + "/credentials"
+    postData = {
+        "source": "wac",
+        "type": "basic",
+        "context": {},
+        "domain": "quobis",
+        "user": uid,
+        "data": {
+            "password": username
+        },
+        "lease": 0
+
+    }
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+    }
+    response = requests.post(url, data=json.dumps(
+        postData), headers=headers, verify=False)
+
+    if response.status_code != 201:
+        print(
+            "There was an error during the creation of the basic credential for " + username)
+        return
+    else:
+        print("Basic credential for " + username + " was created")
         return
 
 
