@@ -1,33 +1,34 @@
 descriptor_extension: yml
-version: "0.5"
+version: '0.5'
 files:
-  - path: sources/nsd/comm-pilot-nsd.yml
-    type: application/vnd.5gtango.nsd
-    tags:
-      - eu.5gtango
-  - path: sources/vnfd/bs-vnf/bs-vnf.yml
-    type: application/vnd.5gtango.vnfd
-    tags:
-      - eu.5gtango
-  - path: sources/vnfd/ds-vnf/ds-vnf.yml
-    type: application/vnd.5gtango.vnfd
-    tags:
-      - eu.5gtango
-  - path: sources/vnfd/ms-vnf/ms-vnf.yml
-    type: application/vnd.5gtango.vnfd
-    tags:
-      - eu.5gtango
-  - path: sources/vnfd/rp-vnf/rp-vnf.yml
-    type: application/vnd.5gtango.vnfd
-    tags:
-      - eu.5gtango
-  - path: sources/vnfd/wac-vnf/wac-vnf.yml
-    type: application/vnd.5gtango.vnfd
-    tags:
-      - eu.5gtango
+- path: sources/nsd/comm-pilot-nsd.yml
+  type: application/vnd.5gtango.nsd
+  tags:
+  - eu.5gtango
+- path: sources/vnfd/bs-vnf/bs-vnf.yml
+  type: application/vnd.5gtango.vnfd
+  tags:
+  - eu.5gtango
+- path: sources/vnfd/ds-vnf/ds-vnf.yml
+  type: application/vnd.5gtango.vnfd
+  tags:
+  - eu.5gtango
+- path: sources/vnfd/ms-vnf/ms-vnf.yml
+  type: application/vnd.5gtango.vnfd
+  tags:
+  - eu.5gtango
+- path: sources/vnfd/rp-vnf/rp-vnf.yml
+  type: application/vnd.5gtango.vnfd
+  tags:
+  - eu.5gtango
+- path: sources/vnfd/wac-vnf/wac-vnf.yml
+  type: application/vnd.5gtango.vnfd
+  tags:
+  - eu.5gtango
 package:
   description: Communication Pilot
   maintainer: Ana Pol, Quobis, ana.pol@quobis.com
-  name: "communication-pilot"
-  vendor: "quobis"
-  version: "0.6"
+  name: communication-pilot
+  vendor: quobis
+  version: '0.6'
+uuid: 63b6b0d4-d6c7-429d-9eff-f1a88d8b3120

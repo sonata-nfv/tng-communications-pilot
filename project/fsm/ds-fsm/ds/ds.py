@@ -66,7 +66,7 @@ class dsFSM(smbase):
         :param description: description
         """
 
-        self.sm_id = "ds"
+        self.sm_id = "sonfsmcommunication-pilotds-vnfcss1"
         self.sm_version = "0.1"
 
         super(self.__class__, self).__init__(sm_id=self.sm_id,
@@ -173,33 +173,27 @@ class dsFSM(smbase):
         LOG.info('ds ip: ' + ds_ip)
         LOG.info('bs ip: ' + bs_ip)
 
-        i = 1
-        while i < 25:
-            try:
-                time.sleep(100)
 
-                # Initiate SSH connection with the VM
-                ssh_client = ssh.Client(ds_ip, username='ubuntu', logger=LOG,
-                                        key_filename='/root/ds/sandbox.pem')
+        # Initiate SSH connection with the VM
+        ssh_client = ssh.Client(ds_ip, username='ubuntu', logger=LOG,
+                                key_filename='/root/ds/sandbox.pem', retries=40)
 
-                # Enable user ubuntu in tmp folder
-                ssh_client.sendCommand("sudo chown -R ubuntu:ubuntu /tmp/")
+        # Enable user ubuntu in tmp folder
+        ssh_client.sendCommand("sudo chown -R ubuntu:ubuntu /tmp/")
 
-                # # Change qss config
-                ssh_client.sendCommand("sudo sed - r - i '/mongodbUrl: \'mongodb:\/\/.*$/c\        mongodbUrl: 'mongodb:" +
-                                       bs_ip + "/dispatcher\',' /opt/sippo/janus-dispatcher/janus-dispatcher-current/quobis-dispatcher-config.js")
+        # Change qss config
+        ssh_client.sendCommand("sudo sed - r - i '/mongodbUrl: '\''mongodb:\/\/.*$/c\        mongodbUrl: 'mongodb:" +
+                                bs_ip + "/dispatcher'\'',' /opt/sippo/janus-dispatcher/janus-dispatcher-current/quobis-dispatcher-config.js")
 
-                # Restart the services
-                ssh_client.sendCommand(
-                    "pm2 restart /opt/sippo/janus-dispatcher/janus-dispatcher-current/process.json")
+        # Restart the services
+        ssh_client.sendCommand(
+            "pm2 restart /opt/sippo/janus-dispatcher/janus-dispatcher-current/process.json")
 
-                break
-            except:
-                LOG.info("Retry ssh, current attempt: " + str(i))
-                i = i + 1
-                time.sleep(10)
 
-        response = {'status': 'completed'}
+        if ssh_client.connected:
+            response = {'status': 'COMPLETED', 'error': 'None'}
+        else:
+            response = {'status': 'FAILED', 'error': 'FSM SSH connection failed'}
         return response
 
 

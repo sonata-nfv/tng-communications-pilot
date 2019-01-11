@@ -174,35 +174,29 @@ class rpFSM(smbase):
         LOG.info('wac ip: ' + wac_ip)
         LOG.info('rp ip: ' + rp_ip)
 
-        i = 1
-        while i < 25:
-            try:
-                time.sleep(100)
+        # Initiate SSH connection with the VM
+        ssh_client = ssh.Client(rp_ip, username='ubuntu', logger=LOG,
+                                key_filename='/root/rp/sandbox.pem', retries=40)
 
-                # Initiate SSH connection with the VM
-                ssh_client = ssh.Client(rp_ip, username='ubuntu', logger=LOG,
-                                        key_filename='/root/rp/sandbox.pem')
+        # Remove server IP address
+        ssh_client.sendCommand(
+            "sudo sed  -i -r '/server ((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|\s|$)){4}.*$/d' /etc/nginx/sites-enabled/wac-nginx.conf")
 
-                # Enable user ubuntu in tmp folder
-                ssh_client.sendCommand("sudo chown -R ubuntu:ubuntu /tmp/")
+        # Include VNF-WAC IP address
+        ssh_client.sendCommand("sudo sed -i '/hash \$remote\_addr\;/ a " +
+                                "\  server " + wac_ip + " max_fails=2 fail_timeout=5s;" + "' /etc/nginx/sites-enabled/wac-nginx.conf")
 
-                # Remove server IP address
-                ssh_client.sendCommand(
-                    "sudo sed  -i -r '/server ((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|\s|$)){4}.*$/d' /etc/nginx/sites-enabled/wac-nginx.conf")
+        ssh_client.sendCommand("sudo sed -i -r '/upstream wac_pushreg \{/ a \  server " + wac_ip + ":8228;' /etc/nginx/sites-enabled/wac-nginx.conf")
 
-                # Include VNF-WAC IP address
-                ssh_client.sendCommand("sudo sed -i '/hash \$remote\_addr\;/ a " +
-                                       "\  server " + wac_ip + " max_fails=2 fail_timeout=5s;" + "' /etc/nginx/sites-enabled/wac-nginx.conf")
+        # TODO Change SFU1 ip
 
-                # Restart the service with new configuration applied
-                ssh_client.sendCommand("sudo systemctl restart nginx")
-                break
-            except:
-                LOG.info("Retry ssh, current attempt: " + str(i))
-                i = i + 1
-                time.sleep(10)
+        # Restart the service with new configuration applied
+        ssh_client.sendCommand("sudo systemctl restart nginx")
 
-        response = {'status': 'completed'}
+        if ssh_client.connected:
+            response = {'status': 'COMPLETED', 'error': 'None'}
+        else:
+            response = {'status': 'FAILED', 'error': 'FSM SSH connection failed'}
         return response
 
 

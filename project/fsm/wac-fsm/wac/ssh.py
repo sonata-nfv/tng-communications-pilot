@@ -47,6 +47,7 @@ class Client(object):
         self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         self.LOG = logger
 
+        self.LOG.info("The number of retries in the SSH connection is " + str(retries))
         for i in range(retries):
             self.LOG.info("Setting up SSH connection, attempt " + str(i + 1))
             try:
@@ -66,7 +67,8 @@ class Client(object):
                 break
             else:
                 self.LOG.info("SSH connection failed")
-                time.sleep(5)
+                i = i + 1
+                time.sleep(10)
 
     def sendFile(self,file):
         if(self.client and self.connected):

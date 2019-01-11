@@ -16,7 +16,7 @@ virtual_deployment_units:
   - id: "vdu01"
     vm_image: "http://www.google.es"
     vm_image_format: "qcow2"
-    vm_image_md5: "d5ab414b734040a5bbf8684347c2a1a6"
+    vm_image_md5: "e154a2087a221f484d6f107da7c44dd9"
     resource_requirements:
       cpu:
         vcpus: 2
@@ -65,11 +65,3 @@ connection_points:
   - id: "cpinternal"
     interface: "ipv4"
     type: "internal"
-
-#function_specific_managers:
-#  - id: "sonfsmplugtestanritsucss1"
-#    description: "FSM to do a first FSM test"
-#    image: "sonatanfv/plugtest-anritsu-fsm-css"
-#    options:
-#      - key: "type"
-#        value: "start"

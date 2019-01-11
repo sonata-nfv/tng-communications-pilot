@@ -181,51 +181,46 @@ class wacFSM(smbase):
         LOG.info('bs ip: ' + bs_ip)
         LOG.info('janus ip: ' + ms_ip)
 
-        i = 1
-        while i < 25:
-            try:
-                time.sleep(100)
 
-                # Initiate SSH connection with the VM
-                ssh_client = ssh.Client(wac_ip, username='ubuntu', logger=LOG,
-                                        key_filename='/root/wac/sandbox.pem')
+        # Initiate SSH connection with the VM
+        ssh_client = ssh.Client(wac_ip, username='ubuntu', logger=LOG,
+                                key_filename='/root/wac/sandbox.pem', retries=40)
 
-                # Enable user ubuntu in tmp folder
-                ssh_client.sendCommand("sudo chown -R ubuntu:ubuntu /tmp/")
+        # Enable user ubuntu in tmp folder
+        ssh_client.sendCommand("sudo chown -R ubuntu:ubuntu /tmp/")
 
-                # # Change qss config
-                ssh_client.sendCommand("sudo sed -r -i '/\"address\": \"amqp:\/\/.*$/c\                 \"address\": \"amqp://wacDev:wacDev@" +
-                                       bs_ip + "/vhostwac\"' /opt/sippo/qss/qss-current/config.json")
-                ssh_client.sendCommand("sudo sed -r -i '/\"uri\": \"mongodb:\/\/.*$/c\                                \"uri\": \"mongodb://" +
-                                       bs_ip + "/signaling\",' /opt/sippo/qss/qss-current/config.json")
-                ssh_client.sendCommand(
-                    "sudo sed -r -i '/\"janus\": \{/!b;n;c\                                \"address\": \"http://" + ms_ip + ":8020\",' /opt/sippo/qss/qss-current/config.json")
+        # Change qss config
+        ssh_client.sendCommand("sudo sed -r -i '/\"address\": \"amqp:\/\/.*$/c\                 \"address\": \"amqp://wacDev:wacDev@" +
+                                bs_ip + "/vhostwac\"' /opt/sippo/qss/qss-current/config.json")
+        ssh_client.sendCommand("sudo sed -r -i '/\"uri\": \"mongodb:\/\/.*$/c\                                \"uri\": \"mongodb://" +
+                                bs_ip + "/signaling\",' /opt/sippo/qss/qss-current/config.json")
+        ssh_client.sendCommand("sudo sed -r -i '/\"janus\": \{/!b;n;c\                                \"address\": \"http://" + 
+                                ms_ip + ":8020\",' /opt/sippo/qss/qss-current/config.json")
 
-                # # Change WAC config
-                ssh_client.sendCommand("sudo sed -r -i '/^dsn = mongodb:\/\/.*$/c\dsn = mongodb://" +
-                                       bs_ip + "/wacDev?auto_reconnect=true' /opt/sippo/wac/wac-current/config/wac1.ini")
-                ssh_client.sendCommand("sudo sed -r -i '/^rabbitmq = amqp:\/\/.*$/c\\rabbitmq = amqp://wacDev:wacDev@" +
-                                       bs_ip + "/vhostwac' /opt/sippo/wac/wac-current/config/wac1.ini")
+        # Change WAC config
+        ssh_client.sendCommand("sudo sed -r -i '/^dsn = mongodb:\/\/.*$/c\dsn = mongodb://" +
+                                bs_ip + "/wacDev?auto_reconnect=true' /opt/sippo/wac/wac-current/config/wac1.ini")
+        ssh_client.sendCommand("sudo sed -r -i '/^rabbitmq = amqp:\/\/.*$/c\\rabbitmq = amqp://wacDev:wacDev@" +
+                                bs_ip + "/vhostwac' /opt/sippo/wac/wac-current/config/wac1.ini")
 
-                # # Set environment variable DB_URI as the VNF-BS IP
-                # ssh_client.sendCommand(
-                #     "echo 'DB_URI=" + bs_ip + "' >> ~/.profile")
-                # ssh_client.sendCommand("source ~/.profile")
+        # Set environment variable DB_URI as the VNF-BS IP
+        # ssh_client.sendCommand(
+        #     "echo 'DB_URI=" + bs_ip + "' >> ~/.profile")
+        # ssh_client.sendCommand("source ~/.profile")
 
-                # ssh_client.sendCommand("export DB_URI=" + bs_ip)  # DB_URI="IP"
+        # ssh_client.sendCommand("export DB_URI=" + bs_ip)  # DB_URI="IP"
 
-                # Restart the services
-                ssh_client.sendCommand(
-                    "pm2 restart /opt/sippo/qss/qss-current/process.json")
-                ssh_client.sendCommand(
-                    "pm2 restart /opt/sippo/wac/wac-current/process.json")
-                break
-            except:
-                LOG.info("Retry ssh, current attempt: " + str(i))
-                i = i + 1
-                time.sleep(10)
+        # Restart the services
+        ssh_client.sendCommand(
+            "pm2 restart /opt/sippo/qss/qss-current/process.json")
+        ssh_client.sendCommand(
+            "pm2 restart /opt/sippo/wac/wac-current/process.json")
+        ssh_client.sendCommand("sudo systemctl restart nginx")
 
-        response = {'status': 'completed'}
+        if ssh_client.connected:
+            response = {'status': 'COMPLETED', 'error': 'None'}
+        else:
+            response = {'status': 'FAILED', 'error': 'FSM SSH connection failed'}
         return response
 
 

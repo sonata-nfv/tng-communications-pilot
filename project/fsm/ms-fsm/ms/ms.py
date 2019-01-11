@@ -66,7 +66,7 @@ class msFSM(smbase):
         :param description: description
         """
 
-        self.sm_id = "ms"
+        self.sm_id = "sonfsmcommunication-pilotms-vnfcss1"
         self.sm_version = "0.1"
 
         super(self.__class__, self).__init__(sm_id=self.sm_id,
@@ -181,38 +181,33 @@ class msFSM(smbase):
         LOG.info('ms ip: ' + ms_ip)
         LOG.info('wac ip: ' + wac_ip)
 
-        i = 1
-        while i < 25:
-            try:
-                time.sleep(100)
 
-                # Initiate SSH connection with the VM
-                ssh_client = ssh.Client(ds_ip, username='ubuntu', logger=LOG,
-                                        key_filename='/root/ms/sandbox.pem')
+        # Initiate SSH connection with the VM
+        ssh_client = ssh.Client(ds_ip, username='ubuntu', logger=LOG,
+                                key_filename='/root/ms/sandbox.pem', retries=40)
 
-                # Enable user ubuntu in tmp folder
-                ssh_client.sendCommand("sudo chown -R ubuntu:ubuntu /tmp/")
+        # Enable user ubuntu in tmp folder
+        ssh_client.sendCommand("sudo chown -R ubuntu:ubuntu /tmp/")
 
-                # Change ms config
-                ssh_client.sendCommand(
-                    "sudo sed - r - i '/this to advertise our availability to the dispatcher/!b;n;c\        api: \"https://" + ds_ip + ":9021\" ' /opt/janus-wrapper/quobis-janus-config.js")
-                ssh_client.sendCommand(
-                    "sudo sed -r -i '/config.qss = \{/!b;n;c\    api: \"http://" + wac_ip + ":8118/\"' /opt/janus-wrapper/quobis-janus-config.js")
-                ssh_client.sendCommand(
-                    "sudo sed -r -i '/config.asterisk = \{/!b;n;c\        sip: \"" + ms_ip + ":5060\", \/\/ DON'T put localhost here or RTP won't work' /opt/janus-wrapper/quobis-janus-config.js")
+        # Change ms config
+        ssh_client.sendCommand(
+            "sudo sed - r - i '/this to advertise our availability to the dispatcher/!b;n;c\        api: '\''https://" + ds_ip + ":9021'\'' ' /opt/janus-wrapper/quobis-janus-config.js")
+        ssh_client.sendCommand(
+            "sudo sed -r -i '/config.qss = \{/!b;n;c\    api: '\''http://" + wac_ip + ":8118'\'' ' /opt/janus-wrapper/quobis-janus-config.js")
+        ssh_client.sendCommand(
+            "sudo sed -r -i '/config.asterisk = \{/!b;n;c\        sip: \"" + ms_ip + ":5060\", \/\/ DON'T put localhost here or RTP won't work' /opt/janus-wrapper/quobis-janus-config.js")
 
-                # Restart the services
-                ssh_client.sendCommand(
-                    "sudo systemctl restart janus.service")
-                ssh_client.sendCommand(
-                    "sudo systemctl restart janus-wrapper.service")
-                break
-            except:
-                LOG.info("Retry ssh, current attempt: " + str(i))
-                i = i + 1
-                time.sleep(10)
+        # Restart the services
+        ssh_client.sendCommand(
+            "sudo systemctl restart janus.service")
+        ssh_client.sendCommand(
+            "sudo systemctl restart janus-wrapper.service")
 
-        response = {'status': 'completed'}
+
+        if ssh_client.connected:
+            response = {'status': 'COMPLETED', 'error': 'None'}
+        else:
+            response = {'status': 'FAILED', 'error': 'FSM SSH connection failed'}
         return response
 
 

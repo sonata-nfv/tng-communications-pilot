@@ -16,7 +16,7 @@ virtual_deployment_units:
   - id: "vdu01"
     vm_image: "http://www.google.es"
     vm_image_format: "qcow2"
-    vm_image_md5: "1dc4fd2417cd1aedab6be2573f8cd181"
+    vm_image_md5: "095d367eb8390730298012bba0999f22"
     resource_requirements:
       cpu:
         vcpus: 1
@@ -75,7 +75,7 @@ connection_points:
 
 function_specific_managers:
  - id: "sonfsmcommunication-pilotrp-vnfcss1"
-   description: "FSM to do a first FSM test"
+   description: "FSM to configure the reverse proxy VNF (VNF-RP)"
    image: "anapolg/tng-rp-fsm:latest"
    options:
      - key: "type"

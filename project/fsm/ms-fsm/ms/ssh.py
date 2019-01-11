@@ -66,7 +66,8 @@ class Client(object):
                 break
             else:
                 self.LOG.info("SSH connection failed")
-                time.sleep(5)
+                i = i + 1
+                time.sleep(10)
 
     def sendFile(self,file):
         if(self.client and self.connected):
