@@ -182,8 +182,8 @@ class dsFSM(smbase):
         ssh_client.sendCommand("sudo chown -R ubuntu:ubuntu /tmp/")
 
         # Change qss config
-        ssh_client.sendCommand("sudo sed - r - i '/mongodbUrl: '\''mongodb:\/\/.*$/c\        mongodbUrl: 'mongodb:" +
-                                bs_ip + "/dispatcher'\'',' /opt/sippo/janus-dispatcher/janus-dispatcher-current/quobis-dispatcher-config.js")
+        ssh_client.sendCommand("sudo sed -r -i '/mongodbUrl: .*$/c\        mongodbUrl: \"mongodb:\/\/" +
+                                bs_ip + "/dispatcher\",' /opt/sippo/janus-dispatcher/janus-dispatcher-current/quobis-dispatcher-config.js")
 
         # Restart the services
         ssh_client.sendCommand(

@@ -183,7 +183,7 @@ class msFSM(smbase):
 
 
         # Initiate SSH connection with the VM
-        ssh_client = ssh.Client(ds_ip, username='ubuntu', logger=LOG,
+        ssh_client = ssh.Client(ms_ip, username='ubuntu', logger=LOG,
                                 key_filename='/root/ms/sandbox.pem', retries=40)
 
         # Enable user ubuntu in tmp folder
@@ -191,11 +191,11 @@ class msFSM(smbase):
 
         # Change ms config
         ssh_client.sendCommand(
-            "sudo sed - r - i '/this to advertise our availability to the dispatcher/!b;n;c\        api: '\''https://" + ds_ip + ":9021'\'' ' /opt/janus-wrapper/quobis-janus-config.js")
+            "sudo sed -r -i '/this to advertise our availability to the dispatcher/!b;n;c\        api: \"https:\/\/" + ds_ip + ":9021\" ' /opt/janus-wrapper/quobis-janus-config.js")
         ssh_client.sendCommand(
-            "sudo sed -r -i '/config.qss = \{/!b;n;c\    api: '\''http://" + wac_ip + ":8118'\'' ' /opt/janus-wrapper/quobis-janus-config.js")
+            "sudo sed -r -i '/config.qss = \{/!b;n;c\    api: \"http:\/\/" + wac_ip + ":8118\"' /opt/janus-wrapper/quobis-janus-config.js")
         ssh_client.sendCommand(
-            "sudo sed -r -i '/config.asterisk = \{/!b;n;c\        sip: \"" + ms_ip + ":5060\", \/\/ DON'T put localhost here or RTP won't work' /opt/janus-wrapper/quobis-janus-config.js")
+            "sudo sed -r -i '/config.asterisk = \{/!b;n;c\        sip: \"" + ms_ip + ":5060\", \/\/ DONT put localhost here or RTP wont work' /opt/janus-wrapper/quobis-janus-config.js")
 
         # Restart the services
         ssh_client.sendCommand(

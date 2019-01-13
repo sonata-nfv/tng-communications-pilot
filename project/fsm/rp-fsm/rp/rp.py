@@ -157,6 +157,7 @@ class rpFSM(smbase):
         # Extract VNF-RP management IP and VNF-WAC internal IP
         wac_ip = ''
         rp_ip = ''
+        ms_ip = ''
 
         for vnfr in content['vnfrs']:
             if vnfr['virtual_deployment_units'][0]['vdu_reference'][:3] == 'wac':
@@ -171,8 +172,16 @@ class rpFSM(smbase):
                         rp_ip = cp['interface']['address']
                         break
 
+
+            if vnfr['virtual_deployment_units'][0]['vdu_reference'][:2] == 'ms':
+                for cp in vnfr['virtual_deployment_units'][0]['vnfc_instance'][0]['connection_points']:
+                    if cp['id'] == 'internal':
+                        ms_ip = cp['interface']['address']
+                        break
+
         LOG.info('wac ip: ' + wac_ip)
         LOG.info('rp ip: ' + rp_ip)
+        LOG.info('ms ip: ' + ms_ip)
 
         # Initiate SSH connection with the VM
         ssh_client = ssh.Client(rp_ip, username='ubuntu', logger=LOG,
@@ -188,7 +197,8 @@ class rpFSM(smbase):
 
         ssh_client.sendCommand("sudo sed -i -r '/upstream wac_pushreg \{/ a \  server " + wac_ip + ":8228;' /etc/nginx/sites-enabled/wac-nginx.conf")
 
-        # TODO Change SFU1 ip
+        # Change SFU1 IP
+        ssh_client.sendCommand("sudo sed -r -i '/\:9030\/socket.io/c\        proxy_pass http\:\/\/" + ms_ip + "\:9030\/socket.io\/\;' /etc/nginx/sites-enabled/wac-nginx.conf")
 
         # Restart the service with new configuration applied
         ssh_client.sendCommand("sudo systemctl restart nginx")

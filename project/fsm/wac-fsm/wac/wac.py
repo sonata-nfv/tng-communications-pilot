@@ -156,7 +156,7 @@ class wacFSM(smbase):
         # Extract VNF-RP management IP and VNF-WAC internal IP
         wac_ip = ''
         bs_ip = ''
-        ms_ip = ''
+        ds_ip = ''
 
         for vnfr in content['vnfrs']:
             if vnfr['virtual_deployment_units'][0]['vdu_reference'][:2] == 'bs':
@@ -165,21 +165,21 @@ class wacFSM(smbase):
                         bs_ip = cp['interface']['address']
                         break
 
-            if vnfr['virtual_deployment_units'][0]['vdu_reference'][:2] == 'ms':
-                for cp in vnfr['virtual_deployment_units'][0]['vnfc_instance'][0]['connection_points']:
-                    if cp['id'] == 'internal':
-                        ms_ip = cp['interface']['address']
-                        break
-
             if vnfr['virtual_deployment_units'][0]['vdu_reference'][:3] == 'wac':
                 for cp in vnfr['virtual_deployment_units'][0]['vnfc_instance'][0]['connection_points']:
                     if cp['id'] == 'mgmt':
                         wac_ip = cp['interface']['address']
                         break
 
+            if vnfr['virtual_deployment_units'][0]['vdu_reference'][:2] == 'ds':
+                for cp in vnfr['virtual_deployment_units'][0]['vnfc_instance'][0]['connection_points']:
+                    if cp['id'] == 'internal':
+                        ds_ip = cp['interface']['address']
+                        break
+
         LOG.info('wac ip: ' + wac_ip)
         LOG.info('bs ip: ' + bs_ip)
-        LOG.info('janus ip: ' + ms_ip)
+        LOG.info('ds ip: ' + ds_ip)
 
 
         # Initiate SSH connection with the VM
@@ -195,7 +195,7 @@ class wacFSM(smbase):
         ssh_client.sendCommand("sudo sed -r -i '/\"uri\": \"mongodb:\/\/.*$/c\                                \"uri\": \"mongodb://" +
                                 bs_ip + "/signaling\",' /opt/sippo/qss/qss-current/config.json")
         ssh_client.sendCommand("sudo sed -r -i '/\"janus\": \{/!b;n;c\                                \"address\": \"http://" + 
-                                ms_ip + ":8020\",' /opt/sippo/qss/qss-current/config.json")
+                                ds_ip + ":8020\",' /opt/sippo/qss/qss-current/config.json")
 
         # Change WAC config
         ssh_client.sendCommand("sudo sed -r -i '/^dsn = mongodb:\/\/.*$/c\dsn = mongodb://" +
