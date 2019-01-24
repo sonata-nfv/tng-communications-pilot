@@ -1,2 +1,12 @@
 test_ws
-.vscode
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+.vscode/
+.eggs/
+smbase.egg*
+sonmanobase.egg*
+*.pem

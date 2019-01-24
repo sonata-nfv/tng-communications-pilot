@@ -3,10 +3,10 @@
 ## VNF descriptor.
 ##
 descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/master/function-descriptor/vnfd-schema.yml
-version: "vnfd-schema-01"
+version: "vnfd-schema-02"
 vendor: "quobis"
 name: "ms-vnf"
-version: "0.1"
+version: "0.2"
 author: "Ana Pol :@ QUOBIS"
 description: "Media server including Janus and Asterisk"
 ##
@@ -16,7 +16,7 @@ virtual_deployment_units:
   - id: "vdu01"
     vm_image: "http://www.google.es"
     vm_image_format: "qcow2"
-    vm_image_md5: "bbb9e922a49d51c26f2c58b1d3e2a0df"
+    vm_image_md5: "5dbcd9d319ebe2d0a6608136f92fe4d8"
     resource_requirements:
       cpu:
         vcpus: 2
@@ -71,3 +71,11 @@ connection_points:
   - id: "cpinternal"
     interface: "ipv4"
     type: "internal"
+
+function_specific_managers:
+ - id: "sonfsmcommunication-pilotms-vnfcss1"
+   description: "FSM to configure the media server (VNF-MS)"
+   image: "anapolg/tng-ms-fsm:latest"
+   options:
+     - key: "type"
+       value: "configure"

@@ -3,10 +3,10 @@
 ## VNF descriptor.
 ##
 descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/master/function-descriptor/vnfd-schema.yml
-version: "vnfd-schema-01"
+version: "vnfd-schema-02"
 vendor: "quobis"
 name: "ds-vnf"
-version: "0.1"
+version: "0.2"
 author: "Ana Pol :@ QUOBIS"
 description: "Dispatcher"
 ##
@@ -16,7 +16,7 @@ virtual_deployment_units:
   - id: "vdu01"
     vm_image: "http://www.google.es"
     vm_image_format: "qcow2"
-    vm_image_md5: "3a67334e2703ebd6dcd7a8ad6d5f2ea9"
+    vm_image_md5: "93b5ad374aa077630facb0d27ac76bbd"
     resource_requirements:
       cpu:
         vcpus: 1
@@ -60,3 +60,11 @@ connection_points:
   - id: "cpinternal"
     interface: "ipv4"
     type: "internal"
+
+function_specific_managers:
+ - id: "sonfsmcommunication-pilotds-vnfcss1"
+   description: "FSM to configure the Dispatcher (VNF-DS)"
+   image: "anapolg/tng-ds-fsm:latest"
+   options:
+     - key: "type"
+       value: "configure"

@@ -3,10 +3,10 @@
 ## VNF descriptor.
 ##
 descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/master/function-descriptor/vnfd-schema.yml
-version: "vnfd-schema-01"
+version: "vnfd-schema-02"
 vendor: "quobis"
 name: "wac-vnf"
-version: "0.1"
+version: "0.2"
 author: "Ana Pol :@ QUOBIS"
 description: "Web Application Controller"
 ##
@@ -16,7 +16,7 @@ virtual_deployment_units:
   - id: "vdu01"
     vm_image: "http://www.google.es"
     vm_image_format: "qcow2"
-    vm_image_md5: '77f226cd000d359ed4443b50da23c8b1'
+    vm_image_md5: 'eefedbbea76bdfe3a22a22169ed4f79d'
     resource_requirements:
       cpu:
         vcpus: 2
@@ -66,10 +66,10 @@ connection_points:
     interface: "ipv4"
     type: "internal"
 
-#function_specific_managers:
-#  - id: "sonfsmplugtestanritsucss1"
-#    description: "FSM to do a first FSM test"
-#    image: "sonatanfv/plugtest-anritsu-fsm-css"
-#    options:
-#      - key: "type"
-#        value: "start"
+function_specific_managers:
+ - id: "sonfsmcommunication-pilotwac-vnfcss1"
+   description: "FSM to configure the WAC and the QSS (VNF-WAC)"
+   image: "anapolg/tng-wac-fsm:latest"
+   options:
+     - key: "type"
+       value: "configure"

@@ -1,7 +1,7 @@
 descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/master/service-descriptor/nsd-schema.yml
 vendor: "quobis"
 name: "communication-pilot"
-version: "0.1"
+version: "0.2"
 author: "Ana Pol @: QUOBIS"
 description: "Descriptor to package Communication Pilot"
 ##
@@ -12,23 +12,23 @@ network_functions:
   - vnf_id: "vnf_wac_1"
     vnf_vendor: "quobis"
     vnf_name: "wac-vnf"
-    vnf_version: "0.1"
+    vnf_version: "0.2"
   - vnf_id: "vnf_rp"
     vnf_vendor: "quobis"
     vnf_name: "rp-vnf"
-    vnf_version: "0.1"
+    vnf_version: "0.2"
   - vnf_id: "vnf_bs"
     vnf_vendor: "quobis"
     vnf_name: "bs-vnf"
-    vnf_version: "0.1"
+    vnf_version: "0.2"
   - vnf_id: "vnf_ds"
     vnf_vendor: "quobis"
     vnf_name: "ds-vnf"
-    vnf_version: "0.1"
+    vnf_version: "0.2"
   - vnf_id: "vnf_ms"
     vnf_vendor: "quobis"
     vnf_name: "ms-vnf"
-    vnf_version: "0.1"
+    vnf_version: "0.2"
 
 ##
 ## The NS connection points to the
@@ -70,3 +70,11 @@ virtual_links:
       - "vnf_bs:cpinternal"
       - "vnf_ds:cpinternal"
       - "vnf_ms:cpinternal"
+
+service_specific_managers:
+  - id: "sonssmcommunication-pilotconfig"
+    description: "SSM to do a first SSM test"
+    image: "anapolg/tng-videoconference-ssm:latest"
+    options:
+      - key: "type"
+        value: "task"
