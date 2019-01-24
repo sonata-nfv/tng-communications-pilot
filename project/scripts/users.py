@@ -132,7 +132,7 @@ if __name__ == "__main__":
     SAPI_ENDPOINT = "https://" + WAC_URI + "/sapi"
 
     # Remove warnings for insecure
-    urllib3.disable_warnings()
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
     # GET bearer token for the admin user
     adminAccessToken = get_oauth_token(ADMIN_USERNAME, ADMIN_PASSWORD)
