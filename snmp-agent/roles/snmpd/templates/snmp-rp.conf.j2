@@ -88,8 +88,8 @@ dontLogTCPWrappersConnects yes
 extend    consumedBWVNFMS /bin/cat tmp/bw.txt
 extend    provisionedWACusers /bin/cat tmp/provisioned-WAC-users.txt
 extend    registeredWACusers /bin/cat tmp/registered-WAC-users.txt
-extend    currentPacketLoss /bin/cat tmp/pl.txt
-extend    currentJitter /bin/cat tmp/jitter.txt
+extend    currentPacketLoss {{ snmp_installation_path }}/getQoSValues.py packetloss
+extend    currentJitter {{ snmp_installation_path }}/getQoSValues.py jitter
 
 
 ###############################################################################

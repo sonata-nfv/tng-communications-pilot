@@ -58,3 +58,15 @@
   become: yes
   #daemon_reload: yes
   service: name=snmp-agent-communication.service state=started enabled=yes
+
+- name: install pip requests for 
+  pip:
+    name: requests
+    executable: pip3
+
+- name: copy script to get QoS values
+  # become: yes
+  copy:
+      src: getQoSValues.py
+      dest: "{{ snmp_installation_path }}/getQoSValues.py"
+      mode: 0755 

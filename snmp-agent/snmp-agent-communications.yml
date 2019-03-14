@@ -20,6 +20,9 @@ oid_wac_registered_users: .1.3.6.1.4.1.8072.1.3.2.3.1.2.18.114.101.103.105.115.1
 # value obtained with: snmptranslate -On NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"provisionedWACusers\"
 oid_wac_provisioned_users: .1.3.6.1.4.1.8072.1.3.2.3.1.2.19.112.114.111.118.105.115.105.111.110.101.100.87.65.67.117.115.101.114.115
 polling_interval: 30
+qos_REST_port: 8011
+qos_REST_path: /stats/avg/qos/
+
 
 stats_file_path : /tmp/
 bw_file : bw.txt

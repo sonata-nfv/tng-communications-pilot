@@ -42,6 +42,8 @@ import sys
 from functools import partial
 import statistics
 import time
+import requests
+import json
 
 
 # Global variables
@@ -101,12 +103,13 @@ def calculate_bw(oid, interval, session, bw_previous_octects):
     it checks the specified OID which provides the BW consumed in bytes
     then the previous value is subsctracted to get the bits (bytes*8) used in 
     the interval. Finally it is divided by the interval in seconds to
-    get the average rate in bits per second
+    get the average rate in BITS PER SECOND
     """
     # TODO add exception to this
     interface_octects = session.get(oid)
 
     # TODO check if the value is valid
+    # TODO check if interval is 0 and raise error
     delta_bw = int(interface_octects.value) - int(bw_previous_octects)
     bw_value = delta_bw * 8 / interval 
 
@@ -147,6 +150,38 @@ def get_and_write_WAC_provisioned_and_registered_users(list_vnf_wac, oid_registe
     write_stat_in_file(filename_provisioned, str(provisioned_users.value))
 
     return 
+
+def get_QoS_values_from_MS(list_ip_vnf_ms, qos_REST_port, qos_REST_path, filename_jitter, filename_pl):
+    
+    if (qos_REST_port != ''): 
+        port_string = ':' + qos_REST_port.str()
+    else:
+        port_string = ''
+    
+    jitter_list = []
+    packetLoss_list = []
+
+    for ip_vnf_wac_instance in list_ip_vnf_ms:
+        try:
+            response_jitter = requests.get('http://'+ ip_vnf_wac_instance + port_string +'/stats/avg/qos/jitter')
+            response_packetLoss = requests.get('http://'+ ip_vnf_wac_instance + port_string +'/stats/avg/qos/packetloss')
+        except requests.exceptions.RequestException as e:  
+            print(e)
+            return
+
+        try:     
+            jitter_list.append(json.loads(response_jitter)["jitter"])
+            packetLoss_list.append(json.loads(response_packetLoss)["packetLoss"])
+        except:
+            print('Erro reading QoS API')
+            jitter_list.append(0)
+            packetLoss_list.append(0)
+        
+    # we store the max values received from the VNF-MS
+    write_stat_in_file(filename_jitter, str(max(jitter_list)))
+    write_stat_in_file(filename_pl, str(max(packetLoss_list)))
+
+    return
 
 
 def write_stat_in_file(filename, value):
@@ -222,19 +257,21 @@ if __name__ == "__main__":
     #print ("Starting Interval, press CTRL+C to stop. Used interval: " + str(CONFIG['polling_interval']))
     BW_INTERVAL.start() 
     
+    # Get provisioned and registered users values
     filename_registered = CONFIG['stats_file_path'] + CONFIG['wac_registered_file']
     filename_provisioned = CONFIG['stats_file_path'] + CONFIG['wac_provisioned_file']
-    WAC_INTERVAL = Interval(CONFIG['polling_interval'], get_and_write_WAC_provisioned_and_registered_users, args=[LIST_VNF_WAC,CONFIG['oid_wac_registered_users'],CONFIG['oid_wac_provisioned_users'],filename_registered,filename_provisioned])
+    WAC_INTERVAL = Interval(CONFIG['polling_interval'], get_and_write_WAC_provisioned_and_registered_users , args=[LIST_VNF_WAC,CONFIG['oid_wac_registered_users'],CONFIG['oid_wac_provisioned_users'],filename_registered,filename_provisioned])
     
     WAC_INTERVAL.start()
+
+    # Obtain PL and jitter values
+    filename_jitter = CONFIG['stats_file_path'] + CONFIG['jitter_file']
+    filename_pl = CONFIG['stats_file_path'] + CONFIG['pl_file']
+    QoS_INTERVAL = Interval(CONFIG['polling_interval'] + 5, get_QoS_values_from_MS, args=[CONFIG['vnf-ms'],CONFIG['qos_REST_port'],CONFIG['qos_REST_path'],filename_jitter, filename_pl])
+
+    QoS_INTERVAL.start()
 
     # loop to be able to capture the signals and stops the threads
     while True:
         time.sleep(1)
    
-
-# TODO PL and JITTER
-
-## Janus will already provide the PL and Jitter for each call
-## need to get all the values for all the current calls and then calculate the mean. 
-## analyze what to do for inbound and outbound streams.
