@@ -31,7 +31,7 @@
 ## partner consortium (www.5gtango.eu).
 ---
 descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/master/policy-descriptor/policy-schema.yml
-name: comm-pilot-Elasticity-Policy-Premium
+name: comm-pilot-Elasticity-Policy-Basic-Multiple-Actions
 vendor: quobis
 version: '0.1'
 network_service:
@@ -75,6 +75,14 @@ policyRules:
       name: ms-vnf
       vendor: quobis
       version: '0.2'
+  - action_object: ElasticityAction
+    action_type: ScalingType
+    name: addvnf
+    value: '1'
+    target:
+      name: wac-vnf
+      vendor: quobis
+      version: '0.2'
 - name: ElasticityRuleScaleIn
   salience: 1
   inertia:
@@ -97,5 +105,14 @@ policyRules:
     criterion: random
     target:
       name: ms-vnf
+      vendor: quobis
+      version: '0.2'
+  - action_object: ElasticityAction
+    action_type: ScalingType
+    name: removevnf
+    value: '1'
+    criterion: random
+    target:
+      name: wac-vnf
       vendor: quobis
       version: '0.2'
