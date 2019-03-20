@@ -9,6 +9,7 @@
   roles:
       - snmp-agent-communications
       - snmpd
+      - qos-stats
 
 - name: SNMP daemon for MS server
   hosts: vnf-ms

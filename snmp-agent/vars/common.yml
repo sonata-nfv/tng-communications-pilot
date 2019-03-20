@@ -1,6 +1,7 @@
 ---
 snmp_installation_path: /home/quobis/snmp-agent-communications
 wac_scripts_installation_path: /home/quobis/snmp-scripts
+qos_stats_server_path: /home/quobis/qos-stats
 snmp_network_oid: .1.3.6.1.2.1.2.2.1.11.2
 # value obtained with: snmptranslate -On NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"registeredWACusers\"
 snmp_wac_registered_oid: .1.3.6.1.4.1.8072.1.3.2.3.1.2.18.114.101.103.105.115.116.101.114.101.100.87.65.67.117.115.101.114.115
