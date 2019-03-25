@@ -9,7 +9,7 @@ description: "Descriptor to package Communication Pilot"
 ## is composed of.
 ##
 network_functions:
-  - vnf_id: "vnf_wac_1"
+  - vnf_id: "vnf_wac"
     vnf_vendor: "quobis"
     vnf_name: "wac-vnf"
     vnf_version: "0.2"
