@@ -1,0 +1,10 @@
+A list of monitoring metrics should be supported so as to be used by the elasticity policies:
+
+
+Example:
+
+1. number of users established for wac-vnf (eg. wac_num_endusers)
+2. number of sessions established for wac-vnf (eg. wac_num_sessions)
+3. bandwidth for ms-vnf (eg. ms_outgoing_traffic)
+4. number of ms-vnf worker instances (eg. ms_num_workers) # usefull for safe enforcement of scale in action
+5. number of wac-vnf worker instances (eg. wac_num_workers) # usefull for safe enforcement of scale in action
