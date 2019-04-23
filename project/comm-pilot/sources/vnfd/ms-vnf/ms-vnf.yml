@@ -9,38 +9,31 @@ name: "ms-vnf"
 version: "0.2"
 author: "Ana Pol :@ QUOBIS"
 description: "Media server including Janus and Asterisk"
-##
-## The virtual deployment unit.
-##
-deployment_flavours:
-  virtual_deployment_units:
-    - id: "vdu01"
-      vm_image: "http://www.google.es"
-      vm_image_format: "qcow2"
-      vm_image_md5: "5dbcd9d319ebe2d0a6608136f92fe4d8"
-      resource_requirements:
-        cpu:
-          vcpus: 2
-        memory:
-          size: 4
-          size_unit: "GB"
-        storage:
-          size: 40
-          size_unit: "GB"
-      connection_points:
-        - id: "mgmt"
-          interface: "ipv4"
-          type: "management"
-        - id: "external"
-          interface: "ipv4"
-          type: "external"
-          qos_requirements:
-            bandwidth_limits:
-              bandwidth: 50
-              bandwitdh_units: Mbps
-        - id: "internal"
-          interface: "ipv4"
-          type: "internal"
+
+virtual_deployment_units:
+  - id: "vdu01"
+    vm_image: "http://www.google.es"
+    vm_image_format: "qcow2"
+    vm_image_md5: "5dbcd9d319ebe2d0a6608136f92fe4d8"
+    resource_requirements:
+      cpu:
+        vcpus: 2
+      memory:
+        size: 4
+        size_unit: "GB"
+      storage:
+        size: 40
+        size_unit: "GB"
+    connection_points:
+      - id: "mgmt"
+        interface: "ipv4"
+        type: "management"
+      - id: "external"
+        interface: "ipv4"
+        type: "external"
+      - id: "internal"
+        interface: "ipv4"
+        type: "internal"
           
 
 ## The virtual links that interconnect
@@ -77,6 +70,160 @@ connection_points:
   - id: "cpinternal"
     interface: "ipv4"
     type: "internal"
+
+##
+## The deployment flavour.
+##
+deployment_flavours:
+- name: "gold"
+  ##
+  ## The virtual deployment unit.
+  ##
+  virtual_deployment_units:
+    - id: "vdu01"
+      vm_image: "http://www.google.es"
+      vm_image_format: "qcow2"
+      vm_image_md5: "5dbcd9d319ebe2d0a6608136f92fe4d8"
+      resource_requirements:
+        cpu:
+          vcpus: 2
+        memory:
+          size: 4
+          size_unit: "GB"
+        storage:
+          size: 40
+          size_unit: "GB"
+      connection_points:
+        - id: "mgmt"
+          interface: "ipv4"
+          type: "management"
+        - id: "external"
+          interface: "ipv4"
+          type: "external"
+          qos_requirements:
+            bandwidth_limit:
+              bandwidth: 100
+              bandwidth_unit: Mbps
+        - id: "internal"
+          interface: "ipv4"
+          type: "internal"        
+
+  ## The virtual links that interconnect
+  ## the different connections points.
+  ##
+  virtual_links:
+    - id: "vlmgmt"
+      connectivity_type: "E-Line"
+      connection_points_reference:
+        - "vdu01:mgmt"
+        - "cpmgmt"
+    - id: "vlexternal"
+      connectivity_type: "E-Line"
+      connection_points_reference:
+        - "vdu01:external"
+        - "cpexternal"
+      qos_requirements:
+          bandwidth_limit:
+            bandwidth: 100
+            bandwidth_unit: Mbps  
+    - id: "vlinternal"
+      connectivity_type: "E-Line"
+      connection_points_reference:
+        - "vdu01:internal"
+        - "cpinternal"
+
+  ##
+  ## The VNF connection points to the
+  ## outside world.
+  ##
+  connection_points:
+    - id: "cpmgmt"
+      interface: "ipv4"
+      type: "management"
+    - id: "cpexternal"
+      interface: "ipv4"
+      type: "external"
+    - id: "cpinternal"
+      interface: "ipv4"
+      type: "internal"
+
+##
+## The deployment flavour.
+##
+deployment_flavours:
+- name: "silver"
+  ##
+  ## The virtual deployment unit.
+  ##
+  virtual_deployment_units:
+    - id: "vdu01"
+      vm_image: "http://www.google.es"
+      vm_image_format: "qcow2"
+      vm_image_md5: "5dbcd9d319ebe2d0a6608136f92fe4d8"
+      resource_requirements:
+        cpu:
+          vcpus: 2
+        memory:
+          size: 4
+          size_unit: "GB"
+        storage:
+          size: 40
+          size_unit: "GB"
+      connection_points:
+        - id: "mgmt"
+          interface: "ipv4"
+          type: "management"
+        - id: "external"
+          interface: "ipv4"
+          type: "external"
+          qos_requirements:
+            bandwidth_limit:
+              bandwidth: 50
+              bandwidth_unit: Mbps
+        - id: "internal"
+          interface: "ipv4"
+          type: "internal"        
+
+  ## The virtual links that interconnect
+  ## the different connections points.
+  ##
+  virtual_links:
+    - id: "vlmgmt"
+      connectivity_type: "E-Line"
+      connection_points_reference:
+        - "vdu01:mgmt"
+        - "cpmgmt"
+    - id: "vlexternal"
+      connectivity_type: "E-Line"
+      connection_points_reference:
+        - "vdu01:external"
+        - "cpexternal"
+      qos_requirements:
+          bandwidth_limit:
+            bandwidth: 50
+            bandwidth_unit: Mbps
+    - id: "vlinternal"
+      connectivity_type: "E-Line"
+      connection_points_reference:
+        - "vdu01:internal"
+        - "cpinternal"
+    
+  ##
+  ## The VNF connection points to the
+  ## outside world.
+  ##
+  connection_points:
+    - id: "cpmgmt"
+      interface: "ipv4"
+      type: "management"
+    - id: "cpexternal"
+      interface: "ipv4"
+      type: "external"
+    - id: "cpinternal"
+      interface: "ipv4"
+      type: "internal"      
+
+
 
 function_specific_managers:
  - id: "sonfsmcommunication-pilotms-vnfcss1"
