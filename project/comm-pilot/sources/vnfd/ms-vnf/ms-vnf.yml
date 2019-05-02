@@ -148,9 +148,8 @@ deployment_flavours:
       type: "internal"
 
 ##
-## The deployment flavour.
+## silver deployment flavour.
 ##
-deployment_flavours:
 - name: "silver"
   ##
   ## The virtual deployment unit.

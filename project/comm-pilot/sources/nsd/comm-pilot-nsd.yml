@@ -139,8 +139,6 @@ deployment_flavours:
         - "vnf_ds:cpinternal"
         - "vnf_ms:cpinternal"
 
-# optional deployment_flavours
-deployment_flavours:
  # each flavour has a full copy of all fields with possibly adjusted values
   - name: "silver"
     network_functions:
