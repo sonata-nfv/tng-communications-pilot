@@ -5,7 +5,7 @@
 descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/master/function-descriptor/vnfd-schema.yml
 version: "vnfd-schema-02"
 vendor: "quobis"
-name: "ms-vnf"
+name: "ms-vnf-multiflavour"
 version: "0.2"
 author: "Ana Pol :@ QUOBIS"
 description: "Media server including Janus and Asterisk"
