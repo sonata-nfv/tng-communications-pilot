@@ -101,7 +101,7 @@ deployment_flavours:
           interface: "ipv4"
           type: "external"
           qos_requirements:
-            bandwidth_limit:
+            minimum_bandwidth:
               bandwidth: 100
               bandwidth_unit: Mbps
         - id: "internal"
@@ -123,7 +123,7 @@ deployment_flavours:
         - "vdu01:external"
         - "cpexternal"
       qos_requirements:
-          bandwidth_limit:
+          minimum_bandwidth:
             bandwidth: 100
             bandwidth_unit: Mbps  
     - id: "vlinternal"
@@ -176,7 +176,7 @@ deployment_flavours:
           interface: "ipv4"
           type: "external"
           qos_requirements:
-            bandwidth_limit:
+            minimum_bandwidth:
               bandwidth: 50
               bandwidth_unit: Mbps
         - id: "internal"
@@ -198,7 +198,7 @@ deployment_flavours:
         - "vdu01:external"
         - "cpexternal"
       qos_requirements:
-          bandwidth_limit:
+          minimum_bandwidth:
             bandwidth: 50
             bandwidth_unit: Mbps
     - id: "vlinternal"
