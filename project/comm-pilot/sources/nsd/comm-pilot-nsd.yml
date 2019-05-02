@@ -74,7 +74,7 @@ virtual_links:
 # optional deployment_flavours
 deployment_flavours:
  # each flavour has a full copy of all fields with possibly adjusted values
-  - name: "Gold"
+  - name: "gold"
     network_functions:
     - vnf_id: "vnf_wac"
       vnf_vendor: "quobis"
@@ -96,7 +96,7 @@ deployment_flavours:
       vnf_vendor: "quobis"
       vnf_name: "ms-vnf-multiflavour"
       vnf_version: "0.2"
-      vnf_flavour: "Gold"
+      vnf_flavour: "gold"
 
     ##
     ## The NS connection points to the
@@ -142,7 +142,7 @@ deployment_flavours:
 # optional deployment_flavours
 deployment_flavours:
  # each flavour has a full copy of all fields with possibly adjusted values
-  - name: "Silver"
+  - name: "silver"
     network_functions:
     - vnf_id: "vnf_wac"
       vnf_vendor: "quobis"
@@ -164,7 +164,7 @@ deployment_flavours:
       vnf_vendor: "quobis"
       vnf_name: "ms-vnf-multiflavour"
       vnf_version: "0.2"
-      vnf_flavour: "Silver"
+      vnf_flavour: "silver"
 
     ##
     ## The NS connection points to the
