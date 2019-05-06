@@ -96,7 +96,6 @@ deployment_flavours:
       vnf_vendor: "quobis"
       vnf_name: "ms-vnf-multiflavour"
       vnf_version: "0.2"
-      vnf_flavour: "gold"
 
     ##
     ## The NS connection points to the
@@ -130,6 +129,10 @@ deployment_flavours:
         - "vnf_rp:cpexternal"
         - "vnf_ms:cpexternal"
         - "nscpexternal"
+      qos_requirements:
+        minimum_bandwidth:
+          bandwidth: 100
+          bandwidth_unit: Mbps
     - id: "vlinternal"
       connectivity_type: "E-LAN"
       connection_points_reference:
@@ -179,7 +182,7 @@ deployment_flavours:
     ##
     ## The virtual links that interconnect
     ## the different connections points.
-    ##
+    ##s
     virtual_links:
     - id: "vlmgmt"
       connectivity_type: "E-LAN"
@@ -196,6 +199,10 @@ deployment_flavours:
         - "vnf_rp:cpexternal"
         - "vnf_ms:cpexternal"
         - "nscpexternal"
+      qos_requirements:
+        minimum_bandwidth:
+          bandwidth: 50
+          bandwidth_unit: Mbps
     - id: "vlinternal"
       connectivity_type: "E-LAN"
       connection_points_reference:
