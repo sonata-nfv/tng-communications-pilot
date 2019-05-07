@@ -144,7 +144,7 @@ class videoconferenceSSM(smbase):
         # Update the received schedule
         schedule = content['schedule']
 
-        schedule.insert(8, 'vnfs_config')
+        schedule.insert(schedule.index('store_nsr') + 1, 'vnfs_config')
 
         response = {'schedule': schedule, 'status': 'COMPLETED'}
 
