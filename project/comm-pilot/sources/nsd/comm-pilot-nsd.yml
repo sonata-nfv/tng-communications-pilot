@@ -130,6 +130,10 @@ deployment_flavours:
         - "vnf_rp:cpexternal"
         - "vnf_ms:cpexternal"
         - "nscpexternal"
+      qos_requirements:
+        minimum_bandwidth:
+          bandwidth: 1000
+          bandwidth_unit: Mbps    
     - id: "vlinternal"
       connectivity_type: "E-LAN"
       connection_points_reference:
@@ -196,6 +200,10 @@ deployment_flavours:
         - "vnf_rp:cpexternal"
         - "vnf_ms:cpexternal"
         - "nscpexternal"
+      qos_requirements:
+        minimum_bandwidth:
+          bandwidth: 500
+          bandwidth_unit: Mbps  
     - id: "vlinternal"
       connectivity_type: "E-LAN"
       connection_points_reference:
