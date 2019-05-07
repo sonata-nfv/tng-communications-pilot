@@ -131,8 +131,8 @@ deployment_flavours:
         - "nscpexternal"
       qos_requirements:
         minimum_bandwidth:
-          bandwidth: 100
-          bandwidth_unit: Mbps
+          bandwidth: 1000
+          bandwidth_unit: Mbps    
     - id: "vlinternal"
       connectivity_type: "E-LAN"
       connection_points_reference:
@@ -165,7 +165,6 @@ deployment_flavours:
       vnf_vendor: "quobis"
       vnf_name: "ms-vnf-multiflavour"
       vnf_version: "0.2"
-      vnf_flavour: "silver"
 
     ##
     ## The NS connection points to the
@@ -201,8 +200,8 @@ deployment_flavours:
         - "nscpexternal"
       qos_requirements:
         minimum_bandwidth:
-          bandwidth: 50
-          bandwidth_unit: Mbps
+          bandwidth: 500
+          bandwidth_unit: Mbps  
     - id: "vlinternal"
       connectivity_type: "E-LAN"
       connection_points_reference:
