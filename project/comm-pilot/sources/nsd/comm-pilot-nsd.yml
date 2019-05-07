@@ -96,7 +96,6 @@ deployment_flavours:
       vnf_vendor: "quobis"
       vnf_name: "ms-vnf-multiflavour"
       vnf_version: "0.2"
-      vnf_flavour: "gold"
 
     ##
     ## The NS connection points to the
@@ -166,7 +165,6 @@ deployment_flavours:
       vnf_vendor: "quobis"
       vnf_name: "ms-vnf-multiflavour"
       vnf_version: "0.2"
-      vnf_flavour: "silver"
 
     ##
     ## The NS connection points to the
