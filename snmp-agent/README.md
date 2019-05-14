@@ -49,7 +49,7 @@ Both the `snmp agent service` and the `snmpd` service can be deployed in the rem
 	```
 	ansible-playbook snmp-agent-communication-playbook.yml --inventory-file hosts.yml --tags <VNF ID to deploy the service>  
 	```
-	
+
 	The valid tag values ( < VNF ID to deploy the service > ) are as follows:
 	- **vnf-rp**: Installation in the VNF reverse Proxy. This tag instructs the installation of both the `SNMP Agent service` and `snmpd` with the configuration needed to offer the BW (bandwith), PL (Packet Loss) and Jitter values from the VNF-MS and the user load (registered and provisioned users) from VNF-WAC.
 	- **vnf-wac**: Installation in the VNF WAC. It installs `snmpd` with the configuration needed to offer the BW (bandwith), PL (Packet Loss) and Jitter values. This values are read by the SNMP agent deployed in VNF-RP. The SNMP agent service processes the data from all the instances of the WAC to offer a single figure to the monitoring system.
@@ -90,7 +90,7 @@ The behaviour of this script is configured in YAML file `snmp-agent-communicatio
 	This value represents the polling interval used to get values from the VNFs. Please note that a very low interval can lead to high load in the system.
 
 	```
-	polling_interval: 30 
+	polling_interval: 30
 	```
 
 - **SNMP security parameters.**
@@ -99,7 +99,7 @@ The behaviour of this script is configured in YAML file `snmp-agent-communicatio
 	```
 	security_level: auth_with_privacy
 	security_username: quobis
-	auth_protocol: SHA 
+	auth_protocol: SHA
 	auth_password: asterisk
 	privacy_protocol: AES
 	privacy_password: asterisk
@@ -127,7 +127,7 @@ This is a Python 3 script not compatible with Python 2.X.
 
 ### SNMP monitoring of processes
 
-The `snmpd` daemon also enables the monitoring of process and the check of the current values as OID variables. As a first approach, to monitor the availability of the video-conference service, the pm2 daemon is going to be monitored. This process is in charge of launching all the Node processes required to get the service working and also watchs the running processes to restart services when they crash. 
+The `snmpd` daemon also enables the monitoring of process and the check of the current values as OID variables. As a first approach, to monitor the availability of the video-conference service, the pm2 daemon is going to be monitored. This process is in charge of launching all the Node processes required to get the service working and also watchs the running processes to restart services when they crash.
 
 In order to achieve this we only need to add one line per process in the file: `/etc/snmp/snmpd.conf`:
 
@@ -147,21 +147,34 @@ For example, to get the value of the BW which is being consumed by all the VNF-M
 ## How to acces the extended MIB variables
 In order to include the variables neede for this project we used the extended MIB feature of `snmpd`. This is done by adding "extended" lines to `/etc/snmp/snmpd.conf` file.
 
-The table below includes the OID of custom variables added for this project:
+The tables below includes the OID of custom variables added for this project:
 
-|Variable name|MIB name|OID|Description|
+### WAC VNF
+|Variable|MIB|OID|
 |---|---|---|---|
-|Number of registered users in WAC|NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"registeredWACusers\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2. 18.114.101.103.105.115.116.101.114.101.100.87.65.67.117.115.101.114.115 |
-|Number of registered users in WAC|NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"provisionedWACusers\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2. 19.112.114.111.118.105.115.105.111.110.101.100.87.65.67.117.115.101.114.115|
-|Current value of BW|NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"consumedBWVNFMS\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2. 15.99.111.110.115.117.109.101.100.66.87.86.78.70.77.83|
-|Current value of Jitter|NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"currentJitter\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2. 13.99.117.114.114.101.110.116.74.105.116.116.101.114|
-|Current value of packet Loss|NET-SNMP-EXTEND-MIB::nsExtendOutputFull."currentPacketLoss"|.1.3.6.1.4.1.8072.1.3.2.3.1.2. 17.99.117.114.114.101.110.116.80.97.99.107.101.116.76.111.115.115|
+|Sippo Server Sessions |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"sippoServerSessions\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.19.115.105.112.112.111.83.101.114.118.101.114.83.101.115.115.105.111.110.115|
+|Sippo Server Conferences |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"sippoServerConferences\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.22.115.105.112.112.111.83.101.114.118.101.114.67.111.110.102.101.114.101.110.99.101.115|
 
+### MS VNF
+|Variable|MIB|OID|
+|---|---|---|---|
+|Aggregated Outbound Bandwidth |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"aggOutBandwidth\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.15.97.103.103.79.117.116.66.97.110.100.119.105.100.116.104|
+|Audio In NACKs |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"audioInNacks\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.12.97.117.100.105.111.73.110.78.97.99.107.115|
+|Audio In Packets |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"audioInPackets\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.14.97.117.100.105.111.73.110.80.97.99.107.101.116.115|
+|Audio Jitter Local |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"audioJitterLocal\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.16.97.117.100.105.111.74.105.116.116.101.114.76.111.99.97.108|
+|Audio Jitter Remote |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"audioJitterRemote\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.17.97.117.100.105.111.74.105.116.116.101.114.82.101.109.111.116.101|
+|Audio Out NACKs |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"audioOutNacks\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.13.97.117.100.105.111.79.117.116.78.97.99.107.115|
+|Audio Out Packets |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"audioOutPackets\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.15.97.117.100.105.111.79.117.116.80.97.99.107.101.116.115|
+|Audio Packet Lost |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"audioPacketLost\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.15.97.103.103.79.117.116.66.97.110.100.119.105.100.116.104|
+|Audio Packet Lost Remote |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"audioPacketLostRemote\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.21.97.117.100.105.111.80.97.99.107.101.116.76.111.115.116.82.101.109.111.116.101|
+|Video Bytes |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"videoBytes\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.10.118.105.100.101.111.66.121.116.101.115|
+|Video Jitter |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"videoJitter\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.11.118.105.100.101.111.74.105.116.116.101.114|
+|Video NACKs |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"videoNacks\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.10.118.105.100.101.111.78.97.99.107.115|
+|Video Packet Lost |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"videoPacketLost\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.15.118.105.100.101.111.80.97.99.107.101.116.76.111.115.116|
+|Video Packets |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"videoPackets\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.12.118.105.100.101.111.80.97.99.107.101.116.115|
 
-In case of finding any issue with the correspondig OID, it is possible to use the command `snmptranslate`:
-``
+In case of finding any issue with the corresponding OID, it is possible to use the command `snmptranslate`:
+```
 snmptranslate -On NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"currentPacketLoss\"
 .1.3.6.1.4.1.8072.1.3.2.3.1.2.17.99.117.114.114.101.110.116.80.97.99.107.101.116.76.111.115.115
-``
-
-
+```
