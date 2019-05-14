@@ -151,13 +151,13 @@ The tables below includes the OID of custom variables added for this project:
 
 ### WAC VNF
 |Variable|MIB|OID|
-|---|---|---|---|
+|---|---|---|
 |Sippo Server Sessions |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"sippoServerSessions\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.19.115.105.112.112.111.83.101.114.118.101.114.83.101.115.115.105.111.110.115|
 |Sippo Server Conferences |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"sippoServerConferences\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.22.115.105.112.112.111.83.101.114.118.101.114.67.111.110.102.101.114.101.110.99.101.115|
 
 ### MS VNF
 |Variable|MIB|OID|
-|---|---|---|---|
+|---|---|---|
 |Aggregated Outbound Bandwidth |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"aggOutBandwidth\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.15.97.103.103.79.117.116.66.97.110.100.119.105.100.116.104|
 |Audio In NACKs |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"audioInNacks\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.12.97.117.100.105.111.73.110.78.97.99.107.115|
 |Audio In Packets |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"audioInPackets\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.14.97.117.100.105.111.73.110.80.97.99.107.101.116.115|
