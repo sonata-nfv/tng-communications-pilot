@@ -194,7 +194,7 @@ class wacFSM(smbase):
                                 bs_ip + "/vhostwac\"' /opt/sippo/qss/qss-current/config.json")
         ssh_client.sendCommand("sudo sed -r -i '/\"uri\": \"mongodb:\/\/.*$/c\                                \"uri\": \"mongodb://" +
                                 bs_ip + "/signaling\",' /opt/sippo/qss/qss-current/config.json")
-        ssh_client.sendCommand("sudo sed -r -i '/\"janus\": \{/!b;n;c\                                \"address\": \"http://" + 
+        ssh_client.sendCommand("sudo sed -r -i '/\"janus\": \{/!b;n;c\                                \"address\": \"http://" +
                                 ds_ip + ":8020\",' /opt/sippo/qss/qss-current/config.json")
 
         # Change WAC config
@@ -202,6 +202,9 @@ class wacFSM(smbase):
                                 bs_ip + "/wacDev?auto_reconnect=true' /opt/sippo/wac/wac-current/config/wac1.ini")
         ssh_client.sendCommand("sudo sed -r -i '/^rabbitmq = amqp:\/\/.*$/c\\rabbitmq = amqp://wacDev:wacDev@" +
                                 bs_ip + "/vhostwac' /opt/sippo/wac/wac-current/config/wac1.ini")
+
+        # Create self-signed certificate
+        ssh_client.sendComand("sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /opt/sippo/wac/wac-current/config/cert/server-private-key.pem -out /opt/sippo/wac/wac-current/config/cert/server-X509-certificate.pem  -subj '/C=ES/ST=Pontevedra/L=Porrino/O=Quobis/OU=IT Department/CN=ssl.quobis.com'")
 
         # Set environment variable DB_URI as the VNF-BS IP
         # ssh_client.sendCommand(
