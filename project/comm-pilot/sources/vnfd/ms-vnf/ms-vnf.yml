@@ -14,7 +14,7 @@ virtual_deployment_units:
   - id: "vdu01"
     vm_image: "http://www.google.es"
     vm_image_format: "qcow2"
-    vm_image_md5: "5dbcd9d319ebe2d0a6608136f92fe4d8"
+    vm_image_md5: "41e1c2ea222a2f7755471e0ee6ff218f"
     resource_requirements:
       cpu:
         vcpus: 2
@@ -113,8 +113,8 @@ virtual_deployment_units:
           metric_type: "gauge"
           unit: "number"
           mib_name: "NET-SNMP-EXTEND-MIB"
-        
-          
+
+
 
 ## The virtual links that interconnect
 ## the different connections points.
