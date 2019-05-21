@@ -59,9 +59,9 @@ virtual_links:
   - id: "vlexternal"
     connectivity_type: "E-LAN"
     connection_points_reference:
+      - "nscpexternal"
       - "vnf-rp:cpexternal"
       - "vnf-ms:cpexternal"
-      - "nscpexternal"
   - id: "vlinternal"
     connectivity_type: "E-LAN"
     connection_points_reference:
@@ -126,9 +126,9 @@ deployment_flavours:
     - id: "vlexternal"
       connectivity_type: "E-LAN"
       connection_points_reference:
+        - "nscpexternal"
         - "vnf-rp:cpexternal"
         - "vnf-ms:cpexternal"
-        - "nscpexternal"
       qos_requirements:
         minimum_bandwidth:
           bandwidth: 1000
@@ -195,9 +195,9 @@ deployment_flavours:
     - id: "vlexternal"
       connectivity_type: "E-LAN"
       connection_points_reference:
+        - "nscpexternal"
         - "vnf-rp:cpexternal"
         - "vnf-ms:cpexternal"
-        - "nscpexternal"
       qos_requirements:
         minimum_bandwidth:
           bandwidth: 500
