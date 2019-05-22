@@ -6,7 +6,7 @@ descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/maste
 version: "vnfd-schema-02"
 vendor: "quobis"
 name: "bs-vnf"
-version: "0.3"
+version: "0.4"
 author: "Ana Pol :@ QUOBIS"
 description: "Backend services including MongoDB and RabbitMQ"
 ##
