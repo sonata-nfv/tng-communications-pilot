@@ -172,6 +172,7 @@ The tables below includes the OID of custom variables added for this project:
 |Video NACKs |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"videoNacks\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.10.118.105.100.101.111.78.97.99.107.115|
 |Video Packet Lost |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"videoPacketLost\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.15.118.105.100.101.111.80.97.99.107.101.116.76.111.115.116|
 |Video Packets |NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"videoPackets\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.12.118.105.100.101.111.80.97.99.107.101.116.115|
+|Health check|NET-SNMP-EXTEND-MIB::nsExtendOutputFull.\"health\"|.1.3.6.1.4.1.8072.1.3.2.3.1.2.6.104.101.97.108.116.104|
 
 In case of finding any issue with the corresponding OID, it is possible to use the command `snmptranslate`:
 ```
