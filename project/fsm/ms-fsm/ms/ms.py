@@ -208,12 +208,18 @@ class msFSM(smbase):
         ssh_client.sendCommand(
             "sudo sed -i 's/BS_IP/" + bs_ip + "/g' /opt/janus-wrapper/quobis-janus-config.js")
 
+        # copy template for janusstats and set BS_IP value
+        ssh_client.sendCommand("sudo cp /opt/janusstats/index.js.template /opt/janusstats/index.js")
+        ssh_client.sendCommand(
+            "sudo sed -i 's/BS_IP/" + bs_ip + "/g' /opt/janusstats/index.js")
 
         # Restart the services
         ssh_client.sendCommand(
             "sudo systemctl restart janus.service")
         ssh_client.sendCommand(
             "sudo systemctl restart janus-wrapper.service")
+        ssh_client.sendCommand(
+            "sudo systemctl restart janusstats.service")    
 
 
         if ssh_client.connected:
