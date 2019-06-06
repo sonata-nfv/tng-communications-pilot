@@ -3,10 +3,9 @@
 ## VNF descriptor.
 ##
 descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/master/function-descriptor/vnfd-schema.yml
-version: "vnfd-schema-02"
 vendor: "quobis"
 name: "ms-vnf"
-version: "0.5"
+version: "0.6"
 author: "Ana Pol :@ QUOBIS"
 description: "Media server including Janus and Asterisk"
 
@@ -14,7 +13,7 @@ virtual_deployment_units:
   - id: "vdu01"
     vm_image: "http://www.google.es"
     vm_image_format: "qcow2"
-    vm_image_md5: "86279ab571d56451ecd898549ef94b2c"
+    vm_image_md5: "2e38f2f0542409e345a6d97c522e7d69"
     resource_requirements:
       cpu:
         vcpus: 2

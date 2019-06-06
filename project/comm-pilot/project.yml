@@ -30,5 +30,5 @@ package:
   maintainer: Ana Pol, Quobis, ana.pol@quobis.com
   name: communication-pilot
   vendor: quobis
-  version: '0.12'
+  version: '0.13'
 uuid: 63b6b0d4-d6c7-429d-9eff-f1a88d8b3120

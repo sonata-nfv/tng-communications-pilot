@@ -3,10 +3,9 @@
 ## VNF descriptor.
 ##
 descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/master/function-descriptor/vnfd-schema.yml
-version: "vnfd-schema-02"
 vendor: "quobis"
 name: "wac-vnf"
-version: "0.4"
+version: "0.5"
 author: "Ana Pol :@ QUOBIS"
 description: "Web Application Controller"
 ##
@@ -16,7 +15,7 @@ virtual_deployment_units:
   - id: "vdu01"
     vm_image: "http://www.google.es"
     vm_image_format: "qcow2"
-    vm_image_md5: "8fe99b28c79fcf553cd2e498d5b2dcf6"
+    vm_image_md5: "3cd9a45bf6e0fb24ee1f09710dd87439"
     resource_requirements:
       cpu:
         vcpus: 2

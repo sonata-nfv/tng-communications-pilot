@@ -1,7 +1,7 @@
 descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/master/service-descriptor/nsd-schema.yml
 vendor: "quobis"
 name: "communication-pilot"
-version: "0.4"
+version: "0.5"
 author: "Ana Pol @: QUOBIS"
 description: "Descriptor to package Communication Pilot"
 ##
@@ -12,11 +12,11 @@ network_functions:
   - vnf_id: "vnf-wac"
     vnf_vendor: "quobis"
     vnf_name: "wac-vnf"
-    vnf_version: "0.4"
+    vnf_version: "0.5"
   - vnf_id: "vnf-rp"
     vnf_vendor: "quobis"
     vnf_name: "rp-vnf"
-    vnf_version: "0.4"
+    vnf_version: "0.5"
   - vnf_id: "vnf-bs"
     vnf_vendor: "quobis"
     vnf_name: "bs-vnf"
@@ -28,7 +28,7 @@ network_functions:
   - vnf_id: "vnf-ms"
     vnf_vendor: "quobis"
     vnf_name: "ms-vnf"
-    vnf_version: "0.5"
+    vnf_version: "0.6"
 
 ##
 ## The NS connection points to the
@@ -79,11 +79,11 @@ deployment_flavours:
     - vnf_id: "vnf-wac"
       vnf_vendor: "quobis"
       vnf_name: "wac-vnf"
-      vnf_version: "0.4"
+      vnf_version: "0.5"
     - vnf_id: "vnf-rp"
       vnf_vendor: "quobis"
       vnf_name: "rp-vnf"
-      vnf_version: "0.4"
+      vnf_version: "0.5"
     - vnf_id: "vnf-bs"
       vnf_vendor: "quobis"
       vnf_name: "bs-vnf"
@@ -95,7 +95,7 @@ deployment_flavours:
     - vnf_id: "vnf-ms"
       vnf_vendor: "quobis"
       vnf_name: "ms-vnf"
-      vnf_version: "0.5"
+      vnf_version: "0.6"
 
     ##
     ## The NS connection points to the
@@ -148,11 +148,11 @@ deployment_flavours:
     - vnf_id: "vnf-wac"
       vnf_vendor: "quobis"
       vnf_name: "wac-vnf"
-      vnf_version: "0.4"
+      vnf_version: "0.5"
     - vnf_id: "vnf-rp"
       vnf_vendor: "quobis"
       vnf_name: "rp-vnf"
-      vnf_version: "0.4"
+      vnf_version: "0.5"
     - vnf_id: "vnf-bs"
       vnf_vendor: "quobis"
       vnf_name: "bs-vnf"
@@ -164,7 +164,7 @@ deployment_flavours:
     - vnf_id: "vnf-ms"
       vnf_vendor: "quobis"
       vnf_name: "ms-vnf"
-      vnf_version: "0.5"
+      vnf_version: "0.6"
 
     ##
     ## The NS connection points to the
