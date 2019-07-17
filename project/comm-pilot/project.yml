@@ -27,8 +27,8 @@ files:
   - eu.5gtango
 package:
   description: Communication Pilot
-  maintainer: Ana Pol, Quobis, ana.pol@quobis.com
+  maintainer: Antón Román, Ana Pol, Daniel Vila, Quobis, anton.roman@quobis.com, ana.pol@quobis.com, daniel.vila@quobis.com
   name: communication-pilot
   vendor: quobis
-  version: '0.6'
+  version: '0.16'
 uuid: 63b6b0d4-d6c7-429d-9eff-f1a88d8b3120
