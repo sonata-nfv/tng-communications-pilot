@@ -6,7 +6,7 @@ descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/maste
 version: "vnfd-schema-02"
 vendor: "quobis"
 name: "wac-vnf"
-version: "0.5"
+version: "0.6"
 author: "Ana Pol :@ QUOBIS"
 description: "Web Application Controller"
 ##
@@ -16,7 +16,7 @@ virtual_deployment_units:
   - id: "vdu01"
     vm_image: "http://www.google.es"
     vm_image_format: "qcow2"
-    vm_image_md5: '3cd9a45bf6e0fb24ee1f09710dd87439'
+    vm_image_md5: '708d8d68f9a3e118a035bd6967f089ef'
     resource_requirements:
       cpu:
         vcpus: 2

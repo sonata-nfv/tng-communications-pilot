@@ -6,7 +6,7 @@ descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/maste
 version: "vnfd-schema-02"
 vendor: "quobis"
 name: "rp-vnf"
-version: "0.5"
+version: "0.6"
 author: "Ana Pol :@ QUOBIS"
 description: "Nginx"
 ##
