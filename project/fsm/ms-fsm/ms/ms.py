@@ -177,9 +177,16 @@ class msFSM(smbase):
                         ds_ip = cp['interface']['address']
                         break
 
+            if vnfr['virtual_deployment_units'][0]['vdu_reference'][:2] == 'bs':
+                for cp in vnfr['virtual_deployment_units'][0]['vnfc_instance'][0]['connection_points']:
+                    if cp['id'] == 'internal':
+                        bs_ip = cp['interface']['address']
+                        break            
+
         LOG.info('ds ip: ' + ds_ip)
         LOG.info('ms ip: ' + ms_ip)
         LOG.info('wac ip: ' + wac_ip)
+        LOG.info('bs ip: ' + bs_ip)
 
 
         # Initiate SSH connection with the VM
@@ -188,20 +195,31 @@ class msFSM(smbase):
 
         # Enable user ubuntu in tmp folder
         ssh_client.sendCommand("sudo chown -R ubuntu:ubuntu /tmp/")
+ 
+        # copy template file to be modified with sed command
+        ssh_client.sendCommand("sudo cp /opt/janus-wrapper/quobis-janus-config.js.template /opt/janus-wrapper/quobis-janus-config.js")
+        # Change ms conf
+        ssh_client.sendCommand(
+            "sudo sed -i 's/DS_IP/" + ds_ip + "/g' /opt/janus-wrapper/quobis-janus-config.js")
+        ssh_client.sendCommand(
+            "sudo sed -i 's/WAC_IP/" + wac_ip + "/g' /opt/janus-wrapper/quobis-janus-config.js")
+        ssh_client.sendCommand(
+            "sudo sed -i 's/MS_IP/" + ms_ip + "/g' /opt/janus-wrapper/quobis-janus-config.js")
+        ssh_client.sendCommand(
+            "sudo sed -i 's/BS_IP/" + bs_ip + "/g' /opt/janus-wrapper/quobis-janus-config.js")
 
-        # Change ms config
+        # copy template for janusstats and set BS_IP value
+        ssh_client.sendCommand("sudo cp /opt/janusstats/index.js.template /opt/janusstats/index.js")
         ssh_client.sendCommand(
-            "sudo sed -r -i '/this to advertise our availability to the dispatcher/!b;n;c\        api: \"https:\/\/" + ds_ip + ":9021\" ' /opt/janus-wrapper/quobis-janus-config.js")
-        ssh_client.sendCommand(
-            "sudo sed -r -i '/config.qss = \{/!b;n;c\    api: \"http:\/\/" + wac_ip + ":8118\"' /opt/janus-wrapper/quobis-janus-config.js")
-        ssh_client.sendCommand(
-            "sudo sed -r -i '/config.asterisk = \{/!b;n;c\        sip: \"" + ms_ip + ":5060\", \/\/ DONT put localhost here or RTP wont work' /opt/janus-wrapper/quobis-janus-config.js")
+            "sudo sed -i 's/BS_IP/" + bs_ip + "/g' /opt/janusstats/index.js")
 
         # Restart the services
         ssh_client.sendCommand(
             "sudo systemctl restart janus.service")
         ssh_client.sendCommand(
             "sudo systemctl restart janus-wrapper.service")
+        ssh_client.sendCommand(
+            "sudo systemctl restart janusstats.service")    
 
 
         if ssh_client.connected:
