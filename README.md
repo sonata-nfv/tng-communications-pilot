@@ -70,3 +70,4 @@ The following lead developers are responsible for this repository and have admin
 
 * Antón Román Portabales (anton.roman@quobis.com)
 * Ana Pol González (ana.pol@quobis.com)
+* Daniel Vila Falcón (daniel.vila@quobis.com)

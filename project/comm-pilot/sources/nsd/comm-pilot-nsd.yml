@@ -1,7 +1,7 @@
 descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/master/service-descriptor/nsd-schema.yml
 vendor: "quobis"
 name: "communication-pilot"
-version: "0.2"
+version: "0.5"
 author: "Ana Pol @: QUOBIS"
 description: "Descriptor to package Communication Pilot"
 ##
@@ -9,26 +9,26 @@ description: "Descriptor to package Communication Pilot"
 ## is composed of.
 ##
 network_functions:
-  - vnf_id: "vnf_wac"
+  - vnf_id: "vnf-wac"
     vnf_vendor: "quobis"
     vnf_name: "wac-vnf"
-    vnf_version: "0.2"
-  - vnf_id: "vnf_rp"
+    vnf_version: "0.6"
+  - vnf_id: "vnf-rp"
     vnf_vendor: "quobis"
     vnf_name: "rp-vnf"
-    vnf_version: "0.2"
-  - vnf_id: "vnf_bs"
+    vnf_version: "0.6"
+  - vnf_id: "vnf-bs"
     vnf_vendor: "quobis"
     vnf_name: "bs-vnf"
-    vnf_version: "0.2"
-  - vnf_id: "vnf_ds"
+    vnf_version: "0.5"
+  - vnf_id: "vnf-ds"
     vnf_vendor: "quobis"
     vnf_name: "ds-vnf"
-    vnf_version: "0.2"
-  - vnf_id: "vnf_ms"
+    vnf_version: "0.5"
+  - vnf_id: "vnf-ms"
     vnf_vendor: "quobis"
     vnf_name: "ms-vnf"
-    vnf_version: "0.2"
+    vnf_version: "0.8"
 
 ##
 ## The NS connection points to the
@@ -50,26 +50,167 @@ virtual_links:
   - id: "vlmgmt"
     connectivity_type: "E-LAN"
     connection_points_reference:
-      - "vnf_wac:cpmgmt"
-      - "vnf_rp:cpmgmt"
-      - "vnf_bs:cpmgmt"
-      - "vnf_ds:cpmgmt"
-      - "vnf_ms:cpmgmt"
+      - "vnf-wac:cpmgmt"
+      - "vnf-rp:cpmgmt"
+      - "vnf-bs:cpmgmt"
+      - "vnf-ds:cpmgmt"
+      - "vnf-ms:cpmgmt"
       - "nscpmgmt"
   - id: "vlexternal"
     connectivity_type: "E-LAN"
     connection_points_reference:
-      - "vnf_rp:cpexternal"
-      - "vnf_ms:cpexternal"
       - "nscpexternal"
+      - "vnf-rp:cpexternal"
+      - "vnf-ms:cpexternal"
   - id: "vlinternal"
     connectivity_type: "E-LAN"
     connection_points_reference:
-      - "vnf_wac:cpinternal"
-      - "vnf_rp:cpinternal"
-      - "vnf_bs:cpinternal"
-      - "vnf_ds:cpinternal"
-      - "vnf_ms:cpinternal"
+      - "vnf-wac:cpinternal"
+      - "vnf-rp:cpinternal"
+      - "vnf-bs:cpinternal"
+      - "vnf-ds:cpinternal"
+      - "vnf-ms:cpinternal"
+
+# optional deployment_flavours
+deployment_flavours:
+ # each flavour has a full copy of all fields with possibly adjusted values
+  - name: "gold"
+    network_functions:
+    - vnf_id: "vnf-wac"
+      vnf_vendor: "quobis"
+      vnf_name: "wac-vnf"
+      vnf_version: "0.6"
+    - vnf_id: "vnf-rp"
+      vnf_vendor: "quobis"
+      vnf_name: "rp-vnf"
+      vnf_version: "0.6"
+    - vnf_id: "vnf-bs"
+      vnf_vendor: "quobis"
+      vnf_name: "bs-vnf"
+      vnf_version: "0.5"
+    - vnf_id: "vnf-ds"
+      vnf_vendor: "quobis"
+      vnf_name: "ds-vnf"
+      vnf_version: "0.5"
+    - vnf_id: "vnf-ms"
+      vnf_vendor: "quobis"
+      vnf_name: "ms-vnf"
+      vnf_version: "0.8"
+
+    ##
+    ## The NS connection points to the
+    ## outside world.
+    ##
+    connection_points:
+    - id: "nscpmgmt"
+      interface: "ipv4"
+      type: "management"
+    - id: "nscpexternal"
+      interface: "ipv4"
+      type: "external"
+
+    ##
+    ## The virtual links that interconnect
+    ## the different connections points.
+    ##
+    virtual_links:
+    - id: "vlmgmt"
+      connectivity_type: "E-LAN"
+      connection_points_reference:
+        - "vnf-wac:cpmgmt"
+        - "vnf-rp:cpmgmt"
+        - "vnf-bs:cpmgmt"
+        - "vnf-ds:cpmgmt"
+        - "vnf-ms:cpmgmt"
+        - "nscpmgmt"
+    - id: "vlexternal"
+      connectivity_type: "E-LAN"
+      connection_points_reference:
+        - "nscpexternal"
+        - "vnf-rp:cpexternal"
+        - "vnf-ms:cpexternal"
+      qos_requirements:
+        minimum_bandwidth:
+          bandwidth: 1000
+          bandwidth_unit: Mbps    
+    - id: "vlinternal"
+      connectivity_type: "E-LAN"
+      connection_points_reference:
+        - "vnf-wac:cpinternal"
+        - "vnf-rp:cpinternal"
+        - "vnf-bs:cpinternal"
+        - "vnf-ds:cpinternal"
+        - "vnf-ms:cpinternal"
+
+ # each flavour has a full copy of all fields with possibly adjusted values
+  - name: "silver"
+    network_functions:
+    - vnf_id: "vnf-wac"
+      vnf_vendor: "quobis"
+      vnf_name: "wac-vnf"
+      vnf_version: "0.6"
+    - vnf_id: "vnf-rp"
+      vnf_vendor: "quobis"
+      vnf_name: "rp-vnf"
+      vnf_version: "0.6"
+    - vnf_id: "vnf-bs"
+      vnf_vendor: "quobis"
+      vnf_name: "bs-vnf"
+      vnf_version: "0.5"
+    - vnf_id: "vnf-ds"
+      vnf_vendor: "quobis"
+      vnf_name: "ds-vnf"
+      vnf_version: "0.5"
+    - vnf_id: "vnf-ms"
+      vnf_vendor: "quobis"
+      vnf_name: "ms-vnf"
+      vnf_version: "0.8"
+
+    ##
+    ## The NS connection points to the
+    ## outside world.
+    ##
+    connection_points:
+    - id: "nscpmgmt"
+      interface: "ipv4"
+      type: "management"
+    - id: "nscpexternal"
+      interface: "ipv4"
+      type: "external"
+
+    ##
+    ## The virtual links that interconnect
+    ## the different connections points.
+    ##
+    virtual_links:
+    - id: "vlmgmt"
+      connectivity_type: "E-LAN"
+      connection_points_reference:
+        - "vnf-wac:cpmgmt"
+        - "vnf-rp:cpmgmt"
+        - "vnf-bs:cpmgmt"
+        - "vnf-ds:cpmgmt"
+        - "vnf-ms:cpmgmt"
+        - "nscpmgmt"
+    - id: "vlexternal"
+      connectivity_type: "E-LAN"
+      connection_points_reference:
+        - "nscpexternal"
+        - "vnf-rp:cpexternal"
+        - "vnf-ms:cpexternal"
+      qos_requirements:
+        minimum_bandwidth:
+          bandwidth: 500
+          bandwidth_unit: Mbps  
+    - id: "vlinternal"
+      connectivity_type: "E-LAN"
+      connection_points_reference:
+        - "vnf-wac:cpinternal"
+        - "vnf-rp:cpinternal"
+        - "vnf-bs:cpinternal"
+        - "vnf-ds:cpinternal"
+        - "vnf-ms:cpinternal"
+
 
 service_specific_managers:
   - id: "sonssmcommunication-pilotconfig"

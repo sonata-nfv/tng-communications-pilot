@@ -6,7 +6,7 @@ descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/maste
 version: "vnfd-schema-02"
 vendor: "quobis"
 name: "ds-vnf"
-version: "0.2"
+version: "0.5"
 author: "Ana Pol :@ QUOBIS"
 description: "Dispatcher"
 ##
@@ -16,7 +16,7 @@ virtual_deployment_units:
   - id: "vdu01"
     vm_image: "http://www.google.es"
     vm_image_format: "qcow2"
-    vm_image_md5: "93b5ad374aa077630facb0d27ac76bbd"
+    vm_image_md5: "487711c2a4359d61c6c3742af7b01b26"
     resource_requirements:
       cpu:
         vcpus: 1
@@ -24,7 +24,7 @@ virtual_deployment_units:
         size: 2
         size_unit: "GB"
       storage:
-        size: 20
+        size: 40
         size_unit: "GB"
     connection_points:
       - id: "mgmt"

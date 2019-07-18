@@ -43,9 +43,10 @@ ENV broker_host amqp://guest:guest@broker:5672/%2F
 ENV broker_exchange son-kernel
 
 ADD ds-fsm /root
+COPY sandbox.pem /root/ds/
 
 WORKDIR /root/base/son-mano-base
-Run python setup.py install
+RUN python setup.py install
 
 WORKDIR /root/base/sm-base
 RUN python setup.py install

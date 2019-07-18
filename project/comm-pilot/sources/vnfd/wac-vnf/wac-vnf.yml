@@ -3,10 +3,9 @@
 ## VNF descriptor.
 ##
 descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/master/function-descriptor/vnfd-schema.yml
-version: "vnfd-schema-02"
 vendor: "quobis"
 name: "wac-vnf"
-version: "0.2"
+version: "0.6"
 author: "Ana Pol :@ QUOBIS"
 description: "Web Application Controller"
 ##
@@ -16,7 +15,7 @@ virtual_deployment_units:
   - id: "vdu01"
     vm_image: "http://www.google.es"
     vm_image_format: "qcow2"
-    vm_image_md5: 'eefedbbea76bdfe3a22a22169ed4f79d'
+    vm_image_md5: "708d8d68f9a3e118a035bd6967f089ef"
     resource_requirements:
       cpu:
         vcpus: 2
@@ -34,6 +33,33 @@ virtual_deployment_units:
         interface: "ipv4"
         type: "internal"
 # input / output / internal / external /  management
+
+    monitoring_parameters:
+      - name: "cpu_util"
+        unit: "Percentage"
+      - name: "memory_usage"
+        unit: "MB"
+
+    snmp_parameters:
+      version: "v2"
+      auth_protocol: "None"
+      security_level: "None"
+      username: "public"
+      port: 161
+      interval: 10
+      oids:
+        - oid: "1.3.6.1.4.1.8072.1.3.2.3.1.2.19.115.105.112.112.111.83.101.114.118.101.114.83.101.115.115.105.111.110.115"
+          metric_name: "sippoServerSessions"
+          metric_type: "gauge"
+          unit: "number"
+          mib_name: "NET-SNMP-EXTEND-MIB"
+        - oid: "1.3.6.1.4.1.8072.1.3.2.3.1.2.22.115.105.112.112.111.83.101.114.118.101.114.67.111.110.102.101.114.101.110.99.101.115"
+          metric_name: "sippoServerConferences"
+          metric_type: "gauge"
+          unit: "number"
+          mib_name: "NET-SNMP-EXTEND-MIB"
+
+
 
 ## The virtual links that interconnect
 ## the different connections points.

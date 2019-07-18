@@ -3,10 +3,9 @@
 ## VNF descriptor.
 ##
 descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/master/function-descriptor/vnfd-schema.yml
-version: "vnfd-schema-02"
 vendor: "quobis"
 name: "rp-vnf"
-version: "0.2"
+version: "0.6"
 author: "Ana Pol :@ QUOBIS"
 description: "Nginx"
 ##
@@ -16,7 +15,7 @@ virtual_deployment_units:
   - id: "vdu01"
     vm_image: "http://www.google.es"
     vm_image_format: "qcow2"
-    vm_image_md5: "095d367eb8390730298012bba0999f22"
+    vm_image_md5: "1efabb3a3d07d1fd253e6f54b7ef8c5c"
     resource_requirements:
       cpu:
         vcpus: 1
@@ -24,7 +23,7 @@ virtual_deployment_units:
         size: 2
         size_unit: "GB"
       storage:
-        size: 20
+        size: 40
         size_unit: "GB"
     connection_points:
       - id: "mgmt"
