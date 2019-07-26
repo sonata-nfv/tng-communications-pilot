@@ -149,8 +149,8 @@ class rpFSM(smbase):
 
     def configure_event(self, content):
         """
-        This method handles a configure event. The configure event changes the configuration 
-        of the nginx and modifies it whenever a new VNF-WAC or VNF-MS is added or removed 
+        This method handles a configure event. The configure event changes the configuration
+        of the nginx and modifies it whenever a new VNF-WAC or VNF-MS is added or removed
         from the system.
         """
 
@@ -158,6 +158,8 @@ class rpFSM(smbase):
         wac_ip = ''
         rp_ip = ''
         ms_ip = ''
+        ds_ip = ''
+        bs_ip = ''
 
         for vnfr in content['vnfrs']:
             if vnfr['virtual_deployment_units'][0]['vdu_reference'][:3] == 'wac':
@@ -179,9 +181,23 @@ class rpFSM(smbase):
                         ms_ip = cp['interface']['address']
                         break
 
+            if vnfr['virtual_deployment_units'][0]['vdu_reference'][:2] == 'ds':
+                for cp in vnfr['virtual_deployment_units'][0]['vnfc_instance'][0]['connection_points']:
+                    if cp['id'] == 'internal':
+                        ds_ip = cp['interface']['address']
+                        break
+
+            if vnfr['virtual_deployment_units'][0]['vdu_reference'][:2] == 'bs':
+                for cp in vnfr['virtual_deployment_units'][0]['vnfc_instance'][0]['connection_points']:
+                    if cp['id'] == 'internal':
+                        bs_ip = cp['interface']['address']
+                        break
+
         LOG.info('wac ip: ' + wac_ip)
         LOG.info('rp ip: ' + rp_ip)
         LOG.info('ms ip: ' + ms_ip)
+        LOG.info('ds ip: ' + ds_ip)
+        LOG.info('bs ip: ' + bs_ip)
 
         # Initiate SSH connection with the VM
         ssh_client = ssh.Client(rp_ip, username='ubuntu', logger=LOG,
@@ -200,9 +216,23 @@ class rpFSM(smbase):
         # Change SFU1 IP
         ssh_client.sendCommand("sudo sed -r -i '/\:9030\/socket.io/c\        proxy_pass http\:\/\/" + ms_ip + "\:9030\/socket.io\/\;' /etc/nginx/sites-enabled/wac-nginx.conf")
 
+
+        # copy template file to be modified with sed command
+        ssh_client.sendCommand("sudo cp /opt/health-script/health.sh.template /opt/health-script/health.sh")
+        # Change health.sh
+        ssh_client.sendCommand(
+            "sudo sed -i 's/DS_IP/" + ds_ip + "/g' /opt/health-script/health.sh")
+        ssh_client.sendCommand(
+            "sudo sed -i 's/WAC_IP/" + wac_ip + "/g' /opt/health-script/health.sh")
+        ssh_client.sendCommand(
+            "sudo sed -i 's/MS_IP/" + ms_ip + "/g' /opt/health-script/health.sh")
+        ssh_client.sendCommand(
+            "sudo sed -i 's/BS_IP/" + bs_ip + "/g' /opt/health-script/health.sh")
+
         # Restart the service with new configuration applied
         ssh_client.sendCommand("sudo systemctl restart nginx")
-
+        # Run the health.sh
+        ssh_client.sendCommand("/opt/health-script/health.sh")
         if ssh_client.connected:
             response = {'status': 'COMPLETED', 'error': 'None'}
         else:

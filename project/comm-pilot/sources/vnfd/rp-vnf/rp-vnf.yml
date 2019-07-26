@@ -5,7 +5,7 @@
 descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/master/function-descriptor/vnfd-schema.yml
 vendor: "quobis"
 name: "rp-vnf"
-version: "0.6"
+version: "0.7"
 author: "Ana Pol :@ QUOBIS"
 description: "Nginx"
 ##
@@ -15,7 +15,7 @@ virtual_deployment_units:
   - id: "vdu01"
     vm_image: "http://www.google.es"
     vm_image_format: "qcow2"
-    vm_image_md5: "1efabb3a3d07d1fd253e6f54b7ef8c5c"
+    vm_image_md5: "e8045586760eba98962601efb43f427d"
     resource_requirements:
       cpu:
         vcpus: 1
@@ -35,7 +35,20 @@ virtual_deployment_units:
       - id: "internal"
         interface: "ipv4"
         type: "internal"
-# input / output / internal / external /  management
+
+    snmp_parameters:
+      version: "v2"
+      auth_protocol: "None"
+      security_level: "None"
+      username: "public"
+      port: 161
+      interval: 10
+      oids:
+        - oid: ".1.3.6.1.4.1.8072.1.3.2.3.1.2.6.104.101.97.108.116.104"
+          metric_name: "health"
+          metric_type: "gauge"
+          unit: "number"
+          mib_name: "NET-SNMP-EXTEND-MIB"
 
 ## The virtual links that interconnect
 ## the different connections points.
