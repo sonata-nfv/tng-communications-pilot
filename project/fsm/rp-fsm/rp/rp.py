@@ -155,7 +155,7 @@ class rpFSM(smbase):
         """
 
         # Extract VNF-RP management IP and VNF-WAC internal IP
-        wac_ip_list = []
+        wac_ip = ''
         rp_ip = ''
         ms_ip = ''
         ds_ip = ''
@@ -165,7 +165,7 @@ class rpFSM(smbase):
             if vnfr['virtual_deployment_units'][0]['vdu_reference'][:3] == 'wac':
                 for cp in vnfr['virtual_deployment_units'][0]['vnfc_instance'][0]['connection_points']:
                     if cp['id'] == 'internal':
-                        wac_ip_list.append( cp['interface']['address'] )  #NOTE: we must modify this line due to in this way just take one WAC, not all of them!!!!!
+                        wac_ip = cp['interface']['address']   #NOTE: we must modify this line due to in this way just take one WAC, not all of them!!!!!
                         break
 
             if vnfr['virtual_deployment_units'][0]['vdu_reference'][:2] == 'rp':
@@ -193,7 +193,7 @@ class rpFSM(smbase):
                         bs_ip = cp['interface']['address']
                         break
 
-        LOG.info('wac ip: ' + *wac_ip_list)
+        LOG.info('wac ip: ' + wac_ip)
         LOG.info('rp ip: ' + rp_ip)
         LOG.info('ms ip: ' + ms_ip)
         LOG.info('ds ip: ' + ds_ip)
@@ -210,11 +210,10 @@ class rpFSM(smbase):
             "sudo sed  -i -r '/server ((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|\s|$)){4}.*$/d' /etc/nginx/sites-enabled/wac-nginx.conf")
 
         # Include VNF-WAC IP address
-        for wac_ip in wac_ip_list:
-            ssh_client.sendCommand("sudo sed -i '/hash \$remote\_addr\;/ a " +
+        ssh_client.sendCommand("sudo sed -i '/hash \$remote\_addr\;/ a " +
                                     "\  server " + wac_ip + " max_fails=2 fail_timeout=5s;" + "' /etc/nginx/sites-enabled/wac-nginx.conf")
 
-            ssh_client.sendCommand("sudo sed -i -r '/upstream wac_pushreg \{/ a \  server " + wac_ip + ":8228;' /etc/nginx/sites-enabled/wac-nginx.conf")
+        ssh_client.sendCommand("sudo sed -i -r '/upstream wac_pushreg \{/ a \  server " + wac_ip + ":8228;' /etc/nginx/sites-enabled/wac-nginx.conf")
 
         # Change SFU1 IP
         ssh_client.sendCommand("sudo sed -r -i '/\:9030\/socket.io/c\        proxy_pass http\:\/\/" + ms_ip + "\:9030\/socket.io\/\;' /etc/nginx/sites-enabled/wac-nginx.conf")
