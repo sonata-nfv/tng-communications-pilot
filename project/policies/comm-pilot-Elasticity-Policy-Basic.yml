@@ -31,71 +31,41 @@
 ## partner consortium (www.5gtango.eu).
 ---
 descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/master/policy-descriptor/policy-schema.yml
-name: comm-pilot-Elasticity-Policy-Basic
+name: ns-communication-pilot-service-sample-policy
 vendor: quobis
-version: '0.1'
+version: '0.5'
 network_service:
   vendor: quobis
   name: communication-pilot
-  version: '0.1'
+  version: '0.5'
 monitoring_rules:
-- name: ms-vnf:vdu01:cpu_util:more60
-  description: Trigger events if cpu utilization of media server is more than 60 percent
-  duration: 20
+- name: wac-vnf:vdu01:sippoServerSessions:greater4
+  description: Trigger events if sippoServerSessions is greater than 4.
+  duration: 10
   duration_unit: s
-  condition: cpu_util
-  threshold: " > 60"
-- name: ms-vnf:vdu01:cpu_util:less30
-  description: Trigger events if cpu utilization of media server is less than 30.
-  duration: 1
-  duration_unit: m
-  condition: cpu_util
-  threshold: " < 30"
+  condition: sippoServerSessions
+  threshold: " > 4"
 policyRules:
 - name: ElasticityRuleScaleOut
   salience: 1
   inertia:
-    value: 15
+    value: 30
     duration_unit: m
   conditions:
     condition: AND
     rules:
-    - id: ms-vnf.LogMetric
-      field: ms-vnf.LogMetric
+    - id: wac-vnf.LogMetric
+      field: wac-vnf.LogMetric
       type: string
       input: text
       operator: equal
-      value: ms_vnf_vdu01_cpu_util_more60
+      value: wac_vnf_vdu01_sippoServerSessions_greater4
   actions:
   - action_object: ElasticityAction
     action_type: ScalingType
     name: addvnf
     value: '1'
     target:
-      name: ms-vnf
+      name: wac-vnf
       vendor: quobis
-      version: '0.2'
-- name: ElasticityRuleScaleIn
-  salience: 1
-  inertia:
-    value: 15
-    duration_unit: m
-  conditions:
-    condition: AND
-    rules:
-    - id: ms-vnf.LogMetric
-      field: ms-vnf.LogMetric
-      type: string
-      input: text
-      operator: equal
-      value: ms_vnf_vdu01_cpu_util_less30
-  actions:
-  - action_object: ElasticityAction
-    action_type: ScalingType
-    name: removevnf
-    value: '1'
-    criterion: random
-    target:
-      name: ms-vnf
-      vendor: quobis
-      version: '0.2'
+      version: '0.6'
