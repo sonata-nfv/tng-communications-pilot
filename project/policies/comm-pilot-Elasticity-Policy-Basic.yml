@@ -31,7 +31,7 @@
 ## partner consortium (www.5gtango.eu).
 ---
 descriptor_schema: https://raw.githubusercontent.com/sonata-nfv/tng-schema/master/policy-descriptor/policy-schema.yml
-name: comm-pilot-Elasticity-Policy-Basic
+name: ns-communication-pilot-service-sample-policy
 vendor: quobis
 version: '0.5'
 network_service:
@@ -39,9 +39,9 @@ network_service:
   name: communication-pilot
   version: '0.5'
 monitoring_rules:
-- name: wac-vnf:vdu01:sippoServerSessions:more4
-  description: Trigger events if the number of sessions of wac server is more than 4 percent
-  duration: 20
+- name: wac-vnf:vdu01:sippoServerSessions:greater4
+  description: Trigger events if sippoServerSessions is greater than 4.
+  duration: 10
   duration_unit: s
   condition: sippoServerSessions
   threshold: " > 4"
@@ -49,7 +49,7 @@ policyRules:
 - name: ElasticityRuleScaleOut
   salience: 1
   inertia:
-    value: 15
+    value: 30
     duration_unit: m
   conditions:
     condition: AND
@@ -59,7 +59,7 @@ policyRules:
       type: string
       input: text
       operator: equal
-      value: ms_vnf_vdu01_sippoServerSessions_more4
+      value: wac_vnf_vdu01_sippoServerSessions_greater4
   actions:
   - action_object: ElasticityAction
     action_type: ScalingType
