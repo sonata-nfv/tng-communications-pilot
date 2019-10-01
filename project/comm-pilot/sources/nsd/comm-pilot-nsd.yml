@@ -16,7 +16,7 @@ network_functions:
   - vnf_id: "vnf-rp"
     vnf_vendor: "quobis"
     vnf_name: "rp-vnf"
-    vnf_version: "0.7"
+    vnf_version: "0.8"
   - vnf_id: "vnf-bs"
     vnf_vendor: "quobis"
     vnf_name: "bs-vnf"
@@ -83,7 +83,7 @@ deployment_flavours:
     - vnf_id: "vnf-rp"
       vnf_vendor: "quobis"
       vnf_name: "rp-vnf"
-      vnf_version: "0.7"
+      vnf_version: "0.8"
     - vnf_id: "vnf-bs"
       vnf_vendor: "quobis"
       vnf_name: "bs-vnf"
@@ -132,7 +132,7 @@ deployment_flavours:
       qos_requirements:
         minimum_bandwidth:
           bandwidth: 1000
-          bandwidth_unit: Mbps    
+          bandwidth_unit: Mbps
     - id: "vlinternal"
       connectivity_type: "E-LAN"
       connection_points_reference:
@@ -152,7 +152,7 @@ deployment_flavours:
     - vnf_id: "vnf-rp"
       vnf_vendor: "quobis"
       vnf_name: "rp-vnf"
-      vnf_version: "0.7"
+      vnf_version: "0.8"
     - vnf_id: "vnf-bs"
       vnf_vendor: "quobis"
       vnf_name: "bs-vnf"
@@ -201,7 +201,7 @@ deployment_flavours:
       qos_requirements:
         minimum_bandwidth:
           bandwidth: 500
-          bandwidth_unit: Mbps  
+          bandwidth_unit: Mbps
     - id: "vlinternal"
       connectivity_type: "E-LAN"
       connection_points_reference:
@@ -219,3 +219,5 @@ service_specific_managers:
     options:
       - key: "type"
         value: "task"
+      - key: "type"
+        value: "scale"

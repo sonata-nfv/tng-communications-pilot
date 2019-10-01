@@ -1,30 +1,24 @@
 """
 Copyright (c) 2015 SONATA-NFV, 2017 5GTANGO
 ALL RIGHTS RESERVED.
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
     http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
 Neither the name of the SONATA-NFV, 5GTANGO
 nor the names of its contributors may be used to endorse or promote
 products derived from this software without specific prior written
 permission.
-
 This work has been performed in the framework of the SONATA project,
 funded by the European Commission under Grant number 671517 through
 the Horizon 2020 and 5G-PPP programmes. The authors would like to
 acknowledge the contributions of their colleagues of the SONATA
 partner consortium (www.sonata-nfv.eu).
-
 This work has been performed in the framework of the 5GTANGO project,
 funded by the European Commission under Grant number 761493 through
 the Horizon 2020 and 5G-PPP programmes. The authors would like to
@@ -155,6 +149,7 @@ class rpFSM(smbase):
         """
 
         # Extract VNF-RP management IP and VNF-WAC internal IP
+        wac_ip_list = []
         wac_ip = ''
         rp_ip = ''
         ms_ip = ''
@@ -165,7 +160,7 @@ class rpFSM(smbase):
             if vnfr['virtual_deployment_units'][0]['vdu_reference'][:3] == 'wac':
                 for cp in vnfr['virtual_deployment_units'][0]['vnfc_instance'][0]['connection_points']:
                     if cp['id'] == 'internal':
-                        wac_ip = cp['interface']['address']   #NOTE: we must modify this line due to in this way just take one WAC, not all of them!!!!!
+                        wac_ip_list.append(cp['interface']['address'])
                         break
 
             if vnfr['virtual_deployment_units'][0]['vdu_reference'][:2] == 'rp':
@@ -193,7 +188,6 @@ class rpFSM(smbase):
                         bs_ip = cp['interface']['address']
                         break
 
-        LOG.info('wac ip: ' + wac_ip)
         LOG.info('rp ip: ' + rp_ip)
         LOG.info('ms ip: ' + ms_ip)
         LOG.info('ds ip: ' + ds_ip)
@@ -204,20 +198,19 @@ class rpFSM(smbase):
                                 key_filename='/root/rp/sandbox.pem', retries=40)
 
         # Remove server IP address
-
-        # The new image must start without any server in the wac_upstream in file wac_nginx.conf
         ssh_client.sendCommand(
             "sudo sed  -i -r '/server ((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|\s|$)){4}.*$/d' /etc/nginx/sites-enabled/wac-nginx.conf")
 
         # Include VNF-WAC IP address
-        ssh_client.sendCommand("sudo sed -i '/hash \$remote\_addr\;/ a " +
-                                    "\  server " + wac_ip + " max_fails=2 fail_timeout=5s;" + "' /etc/nginx/sites-enabled/wac-nginx.conf")
+        for wacIP in wac_ip_list:
+            ssh_client.sendCommand("sudo sed -i '/hash \$remote\_addr\;/ a " +
+                                    "\  server " + wacIP + " max_fails=2 fail_timeout=5s;" + "' /etc/nginx/sites-enabled/wac-nginx.conf")
 
-        ssh_client.sendCommand("sudo sed -i -r '/upstream wac_pushreg \{/ a \  server " + wac_ip + ":8228;' /etc/nginx/sites-enabled/wac-nginx.conf")
+            ssh_client.sendCommand("sudo sed -i -r '/upstream wac_pushreg \{/ a \  server " + wacIP + ":8228;' /etc/nginx/sites-enabled/wac-nginx.conf")
+            wac_ip = wacIP
 
         # Change SFU1 IP
         ssh_client.sendCommand("sudo sed -r -i '/\:9030\/socket.io/c\        proxy_pass http\:\/\/" + ms_ip + "\:9030\/socket.io\/\;' /etc/nginx/sites-enabled/wac-nginx.conf")
-
 
         # copy template file to be modified with sed command
         ssh_client.sendCommand("sudo cp /opt/health-script/health.sh.template /opt/health-script/health.sh")
@@ -231,10 +224,10 @@ class rpFSM(smbase):
         ssh_client.sendCommand(
             "sudo sed -i 's/BS_IP/" + bs_ip + "/g' /opt/health-script/health.sh")
 
+        ssh_client.sendCommand("screen -d -m /opt/health-script/health.sh")
         # Restart the service with new configuration applied
         ssh_client.sendCommand("sudo systemctl restart nginx")
-        # Run the health.sh
-        ssh_client.sendCommand("/opt/health-script/health.sh > /dev/null 2>&1 &")
+
         if ssh_client.connected:
             response = {'status': 'COMPLETED', 'error': 'None'}
         else:
