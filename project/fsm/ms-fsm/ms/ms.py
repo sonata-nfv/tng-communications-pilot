@@ -181,7 +181,7 @@ class msFSM(smbase):
                 for cp in vnfr['virtual_deployment_units'][0]['vnfc_instance'][0]['connection_points']:
                     if cp['id'] == 'internal':
                         bs_ip = cp['interface']['address']
-                        break            
+                        break
 
         LOG.info('ds ip: ' + ds_ip)
         LOG.info('ms ip: ' + ms_ip)
@@ -195,7 +195,7 @@ class msFSM(smbase):
 
         # Enable user ubuntu in tmp folder
         ssh_client.sendCommand("sudo chown -R ubuntu:ubuntu /tmp/")
- 
+
         # copy template file to be modified with sed command
         ssh_client.sendCommand("sudo cp /opt/janus-wrapper/quobis-janus-config.js.template /opt/janus-wrapper/quobis-janus-config.js")
         # Change ms conf
@@ -207,7 +207,8 @@ class msFSM(smbase):
             "sudo sed -i 's/MS_IP/" + ms_ip + "/g' /opt/janus-wrapper/quobis-janus-config.js")
         ssh_client.sendCommand(
             "sudo sed -i 's/BS_IP/" + bs_ip + "/g' /opt/janus-wrapper/quobis-janus-config.js")
-
+        ssh_client.sendCommand(
+            "sudo sed -i 's/;nat_1_1_mapping = 1.2.3.4/nat_1_1_mapping = "+ms_ip+"/g' /opt/janus/etc/janus/janus.cfg")
         # copy template for janusstats and set BS_IP value
         ssh_client.sendCommand("sudo cp /opt/janusstats/index.js.template /opt/janusstats/index.js")
         ssh_client.sendCommand(
@@ -219,7 +220,7 @@ class msFSM(smbase):
         ssh_client.sendCommand(
             "sudo systemctl restart janus-wrapper.service")
         ssh_client.sendCommand(
-            "sudo systemctl restart janusstats.service")    
+            "sudo systemctl restart janusstats.service")
 
 
         if ssh_client.connected:

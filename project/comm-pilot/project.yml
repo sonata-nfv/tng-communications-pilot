@@ -5,6 +5,8 @@ files:
   type: application/vnd.5gtango.nsd
   tags:
   - eu.5gtango
+  testing_tags:
+  - comm-pilot-test
 - path: sources/vnfd/bs-vnf/bs-vnf.yml
   type: application/vnd.5gtango.vnfd
   tags:
@@ -30,5 +32,5 @@ package:
   maintainer: Ana Pol, Quobis, ana.pol@quobis.com
   name: communication-pilot
   vendor: quobis
-  version: '0.17'
+  version: '0.19'
 uuid: 63b6b0d4-d6c7-429d-9eff-f1a88d8b3120

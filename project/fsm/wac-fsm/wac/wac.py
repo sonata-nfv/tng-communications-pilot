@@ -194,7 +194,7 @@ class wacFSM(smbase):
                                 bs_ip + "/vhostwac\"' /opt/sippo/qss/qss-current/config.json")
         ssh_client.sendCommand("sudo sed -r -i '/\"uri\": \"mongodb:\/\/.*$/c\                                \"uri\": \"mongodb://" +
                                 bs_ip + "/signaling\",' /opt/sippo/qss/qss-current/config.json")
-        ssh_client.sendCommand("sudo sed -r -i '/\"janus\": \{/!b;n;c\                                \"address\": \"http://" + 
+        ssh_client.sendCommand("sudo sed -r -i '/\"janus\": \{/!b;n;c\                                \"address\": \"http://" +
                                 ds_ip + ":8020\",' /opt/sippo/qss/qss-current/config.json")
 
         # Change WAC config
@@ -202,6 +202,14 @@ class wacFSM(smbase):
                                 bs_ip + "/wacDev?auto_reconnect=true' /opt/sippo/wac/wac-current/config/wac1.ini")
         ssh_client.sendCommand("sudo sed -r -i '/^rabbitmq = amqp:\/\/.*$/c\\rabbitmq = amqp://wacDev:wacDev@" +
                                 bs_ip + "/vhostwac' /opt/sippo/wac/wac-current/config/wac1.ini")
+
+        #sippoServerConferences metric
+        # copy template file to be modified with sed command
+        ssh_client.sendCommand("sudo cp /opt/sippoServerConferences.py.template /opt/sippoServerConferences.py")
+        # Change sippoServerConferences.py
+        ssh_client.sendCommand(
+            "sudo sed -i 's/BS_IP/" + bs_ip + "/g' /opt/sippoServerConferences.py")
+        ssh_client.sendCommand("sudo systemctl restart conferences.service")
 
         # Set environment variable DB_URI as the VNF-BS IP
         # ssh_client.sendCommand(
