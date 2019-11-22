@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# 
+#
 # Neither the name of the SONATA-NFV, 5GTANGO
 # nor the names of its contributors may be used to endorse or promote
 # products derived from this software without specific prior written
@@ -44,6 +44,7 @@ ENV broker_exchange son-kernel
 
 ADD ms-fsm /root
 COPY sandbox.pem /root/ms/
+RUN chmod 400 /root/ms/sandbox.pem
 
 WORKDIR /root/base/son-mano-base
 RUN python setup.py install
@@ -55,4 +56,3 @@ WORKDIR /root
 RUN python setup.py install
 
 CMD ["ms"]
-
